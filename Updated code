@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CivicEase — Smart Living for Every Citizen</title>
+<title>Civic Ease — Smart Living for Every Citizen</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -1541,7 +1541,7 @@ async function testApiKey(){
   const key=document.getElementById('pf-apikey').value.trim()||localStorage.getItem('civicease_apikey')||'';
   if(!key)return setKeyStatus('No key to test. Please enter your key first.','var(--r)');
   setKeyStatus('Testing connection…','var(--mu)');
-  const SERVER_URL='https://YOUR-APP-NAME.onrender.com/chat';
+  const SERVER_URL='https://Civic Ease.onrender.com/chat';
   try{
     const res=await fetch(SERVER_URL,{
       method:'POST',
