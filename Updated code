@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CivicEase — Smart Living for Every Citizen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --td:#0a4a45;--t:#0d7a72;--tm:#12a89d;--tl:#e0f5f4;
+  --g:#d4a017;--gl:#f0c040;--gp:#fdf6e0;
+  --r:#c0392b;--rl:#e74c3c;--rp:#fdecea;
+  --wh:#fff;--sf:#f8fffe;--bd:#c8eae8;--tx:#0d2b29;--mu:#5a8a86;
+  --sw:248px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--sf);color:var(--tx);display:flex;min-height:100vh;overflow-x:hidden}
+
+/* ── ONBOARDING ── */
+#ob{position:fixed;inset:0;background:linear-gradient(135deg,var(–td),var(–t),var(–tm));z-index:2000;display:flex;align-items:center;justify-content:center}
+.ob-card{background:#fff;border-radius:24px;padding:38px;width:520px;max-width:95vw;max-height:93vh;overflow-y:auto;box-shadow:0 30px 80px rgba(10,74,69,.4);border-top:5px solid var(–g)}
+.ob-step{display:none;animation:fi .3s}.ob-step.active{display:block}
+.ob-title{font-family:‘Playfair Display’,serif;font-size:21px;font-weight:800;color:var(–td);margin-bottom:5px}
+.ob-sub{font-size:13px;color:var(–mu);margin-bottom:20px}
+.ob-dots{display:flex;gap:6px;margin-bottom:26px}
+.od{width:8px;height:8px;border-radius:50%;background:var(–bd);transition:all .3s}
+.od.active{background:var(–g);width:22px;border-radius:4px}
+.od.done{background:var(–t)}
+.ob-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.ob-back{color:var(–mu);font-size:13px;cursor:pointer;background:none;border:none;font-family:‘Plus Jakarta Sans’,sans-serif}
+.ob-back:hover{color:var(–t)}
+.info-box{background:var(–tl);border-radius:11px;padding:14px 16px;margin-bottom:18px;border-left:4px solid var(–t);font-size:13px;color:var(–td);line-height:1.6}
+
+/* ── SIDEBAR ── */
+#sb{width:var(–sw);background:var(–td);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;border-right:2px solid rgba(212,160,23,.2)}
+.sb-logo{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);position:relative}
+.sb-logo::after{content:’’;position:absolute;bottom:0;left:20px;right:20px;height:2px;background:linear-gradient(90deg,var(–g),transparent)}
+.lm{display:flex;align-items:center;gap:9px}
+.li{width:33px;height:33px;background:var(–g);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.lt h1{font-family:‘Playfair Display’,serif;font-size:18px;font-weight:800;color:#fff}
+.lt p{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+.ns{padding:11px 9px 3px}
+.nl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.3);padding:0 11px;margin-bottom:4px;font-weight:600}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:9px;cursor:pointer;transition:all .2s;color:rgba(255,255,255,.55);font-size:13px;font-weight:500;margin-bottom:1px}
+.ni:hover{background:rgba(255,255,255,.08);color:#fff}
+.ni.active{background:linear-gradient(135deg,var(–g),var(–gl));color:var(–td);font-weight:700;box-shadow:0 4px 14px rgba(212,160,23,.35)}
+.ni .ic{font-size:16px;width:19px;text-align:center}
+.sb-ft{margin-top:auto;padding:11px 9px;border-top:1px solid rgba(255,255,255,.08)}
+.uc{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:9px;background:rgba(255,255,255,.06);cursor:pointer}
+.uc:hover{background:rgba(255,255,255,.1)}
+.av{width:33px;height:33px;border-radius:50%;background:linear-gradient(135deg,var(–tm),var(–g));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:12px;border:2px solid var(–g);flex-shrink:0}
+.ui p{font-size:13px;color:#fff;font-weight:600}.ui span{font-size:10px;color:rgba(255,255,255,.4)}
+
+/* ── MAIN ── */
+#mn{margin-left:var(–sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.tb{background:#fff;border-bottom:1.5px solid var(–bd);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 1px 10px rgba(13,122,114,.06)}
+.tb-t{font-family:‘Playfair Display’,serif;font-size:19px;font-weight:800;color:var(–td)}
+.tb-s{font-size:12px;color:var(–mu);margin-top:1px}
+.db{background:var(–tl);border:1px solid var(–bd);padding:5px 13px;border-radius:20px;font-size:12px;color:var(–t);font-weight:600}
+.pc{padding:22px 28px;flex:1}
+
+/* ── PAGES ── */
+.pg{display:none;animation:fi .3s}.pg.active{display:block}
+#pg-chat.active{display:flex}
+@keyframes fi{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1.5px solid var(–bd);border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(13,122,114,.05)}
+.ct{font-family:‘Playfair Display’,serif;font-size:15px;font-weight:700;color:var(–td);margin-bottom:3px}
+.cs{font-size:12px;color:var(–mu);margin-bottom:14px}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+/* ── STAT CARDS ── */
+.sc{border-radius:15px;padding:17px;color:#fff;position:relative;overflow:hidden}
+.sc::before{content:’’;position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.1)}
+.sl{font-size:11px;opacity:.85;margin-bottom:4px;font-weight:600;letter-spacing:.3px}
+.sv{font-family:‘Playfair Display’,serif;font-size:22px;font-weight:900}
+.sch{font-size:11px;margin-top:4px;opacity:.85}
+.bg-t{background:linear-gradient(135deg,var(–td),var(–tm))}
+.bg-g{background:linear-gradient(135deg,#a07010,var(–gl));color:var(–td)!important}
+.bg-g .sl,.bg-g .sch{color:var(–td)!important;opacity:.7}
+.bg-r{background:linear-gradient(135deg,#8b1a12,var(–rl))}
+.bg-t2{background:linear-gradient(135deg,var(–t),#1ecec3)}
+
+/* ── BUTTONS ── */
+.btn{padding:9px 17px;border-radius:9px;border:none;cursor:pointer;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;font-weight:600;transition:all .2s}
+.bp{background:var(–t);color:#fff}.bp:hover{background:var(–td);box-shadow:0 4px 12px rgba(13,122,114,.3)}
+.bg2{background:var(–g);color:var(–td)}.bg2:hover{background:var(–gl)}
+.bo{background:transparent;border:1.5px solid var(–bd);color:var(–tx)}.bo:hover{border-color:var(–t);color:var(–t)}
+.bd2{background:var(–rp);color:var(–r);border:none}.bd2:hover{background:#fad7d4}
+.bsm{padding:6px 12px;font-size:12px}
+.bfl{width:100%}
+
+/* ── FORMS ── */
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(–mu);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 13px;border:1.5px solid var(–bd);border-radius:9px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13.5px;color:var(–tx);background:#fff;outline:none;transition:border-color .2s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(–t);box-shadow:0 0 0 3px rgba(13,122,114,.08)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.fg textarea{min-height:72px;resize:vertical}
+
+/* ── TAGS ── */
+.tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.tg{background:var(–tl);color:var(–td)}.tr{background:var(–rp);color:var(–r)}
+.ty{background:var(–gp);color:#7a5800}.tt{background:var(–tl);color:var(–t)}
+.tk{background:#f0f4f4;color:#5a8a86}
+
+/* ── PROGRESS ── */
+.pb{height:7px;background:var(–tl);border-radius:99px;overflow:hidden}
+.pf{height:100%;border-radius:99px;transition:width .6s}
+
+/* ── LISTS ── */
+.li2{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(–bd)}
+.li2:last-child{border-bottom:none}
+.lic{width:37px;height:37px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.lif{flex:1;min-width:0}
+.lif strong{display:block;font-size:13.5px;color:var(–tx);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lif span{font-size:11.5px;color:var(–mu)}
+.lam{font-family:‘Playfair Display’,serif;font-weight:700;font-size:14px;white-space:nowrap}
+
+/* ── MODAL ── */
+.mo{position:fixed;inset:0;background:rgba(10,74,69,.45);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.mo.open{display:flex}
+.md{background:#fff;border-radius:20px;padding:24px;width:460px;max-width:95vw;max-height:88vh;overflow-y:auto;animation:mi .25s;border-top:4px solid var(–g);box-shadow:0 20px 60px rgba(10,74,69,.25)}
+@keyframes mi{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}
+.mt{font-family:‘Playfair Display’,serif;font-size:18px;font-weight:800;color:var(–td)}
+.mc{width:27px;height:27px;border-radius:50%;border:none;background:var(–tl);color:var(–t);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.mf{display:flex;gap:8px;justify-content:flex-end;margin-top:17px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:24px;right:24px;background:var(–td);color:#fff;padding:12px 17px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;max-width:290px;border-left:4px solid var(–g);font-weight:500}
+#toast.show{opacity:1;transform:translateY(0)}
+#toast.err{background:var(–r);border-left-color:#fff}
+#toast.ok{border-left-color:var(–gl)}
+
+/* ── DASHBOARD BANNER ── */
+.wb{background:linear-gradient(135deg,var(–td) 0%,var(–t) 55%,var(–tm) 100%);border-radius:17px;padding:24px 26px;color:#fff;margin-bottom:19px;position:relative;overflow:hidden;border-bottom:3px solid var(–g)}
+.wb::before{content:’’;position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(212,160,23,.1)}
+.wb h2{font-family:‘Playfair Display’,serif;font-size:21px;font-weight:900;margin-bottom:5px}
+.wb p{font-size:13px;opacity:.8;max-width:480px}
+.qa{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.qb{padding:7px 14px;border-radius:20px;background:rgba(255,255,255,.13);color:#fff;border:1px solid rgba(255,255,255,.25);cursor:pointer;font-size:12px;font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:500;transition:all .2s}
+.qb:hover{background:rgba(212,160,23,.3);border-color:var(–gl)}
+
+/* ── CHAT ── */
+#pg-chat{height:calc(100vh - 120px);flex-direction:column}
+.cm{flex:1;overflow-y:auto;padding:14px 0;display:flex;flex-direction:column;gap:12px}
+.msg{display:flex;gap:10px;align-items:flex-start;max-width:78%}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.mav{width:31px;height:31px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.mb{padding:10px 14px;border-radius:14px;font-size:13.5px;line-height:1.6}
+.msg.bot .mav{background:var(–td)}.msg.bot .mb{background:#fff;border:1.5px solid var(–bd);color:var(–tx);border-radius:4px 14px 14px 14px}
+.msg.user .mav{background:var(–g)}.msg.user .mb{background:linear-gradient(135deg,var(–t),var(–tm));color:#fff;border-radius:14px 4px 14px 14px}
+.cib{background:#fff;border:1.5px solid var(–bd);border-radius:13px;display:flex;align-items:center;gap:9px;padding:9px 13px;margin-top:11px;box-shadow:0 2px 10px rgba(13,122,114,.07)}
+.cib input{flex:1;border:none;outline:none;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13.5px;color:var(–tx)}
+.cs2{background:var(–t);color:#fff;border:none;width:33px;height:33px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .2s}
+.cs2:hover{background:var(–td)}
+.td{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(–tm);margin:0 2px;animation:bn .8s infinite}
+.td:nth-child(2){animation-delay:.15s}.td:nth-child(3){animation-delay:.3s}
+@keyframes bn{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* ── COMMUTE ── */
+.rc{background:linear-gradient(135deg,var(–td),var(–t));color:#fff;border-radius:15px;padding:19px 21px;border-bottom:3px solid var(–g)}
+.rs{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.rs:last-child{border-bottom:none}
+
+/* ── MEALS ── */
+.dc{border:1.5px solid var(–bd);border-radius:12px;overflow:hidden}
+.dh{background:var(–t);color:#fff;padding:8px 10px;font-family:‘Playfair Display’,serif;font-size:12px;font-weight:700;text-align:center}
+.ms2{padding:8px 10px;border-bottom:1px solid var(–bd);cursor:pointer;transition:background .15s}
+.ms2:last-child{border-bottom:none}.ms2:hover{background:var(–tl)}
+.ms2 .mt2{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(–mu);font-weight:700}
+.ms2 .mn{font-size:12px;color:var(–tx);margin-top:1px;font-weight:500}
+.ms2.empty .mn{color:var(–mu);font-style:italic}
+
+/* ── MISC ── */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.st{font-family:‘Playfair Display’,serif;font-size:16px;font-weight:800;color:var(–td)}
+.mc2{border:1.5px solid var(–bd);border-radius:13px;padding:14px;display:flex;align-items:center;gap:12px;transition:all .2s}
+.mc2:hover{border-color:var(–t);box-shadow:0 2px 10px rgba(13,122,114,.1)}
+.mci{width:42px;height:42px;border-radius:11px;background:var(–tl);display:flex;align-items:center;justify-content:center;font-size:20px}
+.ir{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(–bd)}
+.ir:last-child{border-bottom:none}
+.es{text-align:center;padding:28px 16px;color:var(–mu)}
+.es .ei{font-size:34px;margin-bottom:8px}
+.es p{font-size:13px}
+.ps{background:#fff;border:1.5px solid var(–bd);border-radius:15px;padding:18px;margin-bottom:14px}
+.ps h3{font-family:‘Playfair Display’,serif;font-size:14px;font-weight:700;color:var(–td);margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(–bd)}
+
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(–bd);border-radius:99px}
+
+@media(max-width:900px){
+#sb{transform:translateX(-100%)}#mn{margin-left:0}
+.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}
+}
+
+/* ── MOBILE NAV TOGGLE ── */
+#ham{display:none;position:fixed;top:12px;left:14px;z-index:300;width:40px;height:40px;border-radius:10px;background:var(–td);border:none;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 2px 10px rgba(10,74,69,.3)}
+#ham span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;transition:all .3s}
+#sb-overlay{display:none;position:fixed;inset:0;background:rgba(10,74,69,.5);z-index:99;backdrop-filter:blur(2px)}
+@media(max-width:900px){
+#ham{display:flex}
+#sb{transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:200}
+#sb.open{transform:translateX(0)}
+#sb-overlay.open{display:block}
+#mn{margin-left:0}
+.tb{padding-left:60px}
+.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}
+#pg-chat{height:calc(100vh - 170px)}
+body{padding-bottom:70px}
+}
+/* ── BOTTOM NAV (mobile) ── */
+#bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(–td);z-index:150;border-top:2px solid rgba(212,160,23,.3);padding:6px 0 env(safe-area-inset-bottom,6px)}
+@media(max-width:900px){#bnav{display:flex}}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 2px;cursor:pointer;transition:all .2s;border-radius:8px;margin:0 2px;gap:2px}
+.bn-item .bn-ico{font-size:20px;line-height:1}
+.bn-item .bn-lbl{font-size:9px;color:rgba(255,255,255,.5);font-weight:600;letter-spacing:.2px}
+.bn-item.active .bn-ico{filter:drop-shadow(0 0 4px rgba(212,160,23,.8))}
+.bn-item.active .bn-lbl{color:var(–gl)}
+/* ── SMOOTH PAGE TRANSITIONS ── */
+.pg{animation:none}
+.pg.slide-in{animation:slideIn .28s cubic-bezier(.4,0,.2,1)}
+.pg.slide-out{animation:slideOut .22s cubic-bezier(.4,0,.2,1)}
+@keyframes slideIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-18px)}}
+/* ── SCANNER MODAL ── */
+#scan-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center}
+#scan-modal.open{display:flex}
+.scan-box{background:#111;border-radius:20px;overflow:hidden;width:360px;max-width:96vw;position:relative}
+.scan-header{background:var(–td);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(–g)}
+.scan-title{font-family:‘Playfair Display’,serif;font-size:17px;font-weight:800;color:#fff}
+.scan-close{width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;cursor:pointer;font-size:14px;font-weight:700}
+#scan-video{width:100%;height:280px;object-fit:cover;display:block}
+.scan-overlay{position:absolute;top:52px;left:0;right:0;height:280px;pointer-events:none}
+.scan-frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:220px;height:160px;border:2px solid var(–gl);border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.45)}
+.scan-line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(–gl),transparent);animation:scanLine 1.8s ease-in-out infinite}
+@keyframes scanLine{0%,100%{top:0}50%{top:158px}}
+.scan-footer{background:#111;padding:16px 18px}
+.scan-status{text-align:center;font-size:13px;color:rgba(255,255,255,.7);margin-bottom:12px;min-height:20px}
+.scan-result{background:rgba(255,255,255,.06);border-radius:11px;padding:14px;margin-bottom:12px;display:none}
+.scan-result .sr-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.4);margin-bottom:4px;font-weight:700}
+.scan-result .sr-val{font-size:14px;color:#fff;font-weight:600}
+.scan-actions{display:flex;gap:8px}
+.scan-btn{flex:1;padding:10px;border-radius:9px;border:none;cursor:pointer;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;font-weight:700;transition:all .2s}
+.scan-primary{background:var(–g);color:var(–td)}
+.scan-primary:hover{background:var(–gl)}
+.scan-secondary{background:rgba(255,255,255,.1);color:#fff}
+.scan-secondary:hover{background:rgba(255,255,255,.18)}
+#manual-exp-row{display:none;margin-top:10px}
+</style>
+
+</head>
+<body>
+
+<!-- Hamburger toggle -->
+
+<button id="ham" onclick="toggleSidebar()" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<!-- Sidebar overlay for mobile -->
+<div id="sb-overlay" onclick="closeSidebar()"></div>
+<!-- Bottom nav (mobile) -->
+<div id="bnav">
+  <div class="bn-item active" onclick="nav('dashboard')" id="bn-dashboard"><div class="bn-ico">&#127968;</div><div class="bn-lbl">Home</div></div>
+  <div class="bn-item" onclick="nav('bills')" id="bn-bills"><div class="bn-ico">&#128179;</div><div class="bn-lbl">Bills</div></div>
+  <div class="bn-item" onclick="nav('expiry')" id="bn-expiry"><div class="bn-ico">&#128230;</div><div class="bn-lbl">Pantry</div></div>
+  <div class="bn-item" onclick="nav('meals')" id="bn-meals"><div class="bn-ico">&#127869;</div><div class="bn-lbl">Meals</div></div>
+  <div class="bn-item" onclick="nav('chat')" id="bn-chat"><div class="bn-ico">&#129302;</div><div class="bn-lbl">AI Chat</div></div>
+</div>
+
+<!-- ═══════════ ONBOARDING ═══════════ -->
+
+<div id="ob">
+  <div class="ob-card">
+    <div class="ob-dots">
+      <div class="od active" id="od0"></div><div class="od" id="od1"></div>
+      <div class="od" id="od2"></div><div class="od" id="od3"></div><div class="od" id="od4"></div>
+    </div>
+
+```
+<!-- Step 0: Welcome -->
+<div class="ob-step active" id="os0">
+  <div style="text-align:center;margin-bottom:22px">
+    <div style="font-size:54px;margin-bottom:10px">&#127963;</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:var(--td);line-height:1.1">Welcome to CivicEase</h1>
+    <p style="color:var(--mu);font-size:13px;margin-top:5px">Smart Living for Every Citizen</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+    <div style="background:var(--tl);border-radius:11px;padding:13px;text-align:center">
+      <div style="font-size:24px;margin-bottom:4px">&#128179;</div>
+      <div style="font-size:12px;font-weight:700;color:var(--td)">Bills &amp; Budget</div>
+      <div style="font-size:11px;color:var(--mu);margin-top:2px">Track all payments</div>
+    </div>
+    <div style="background:var(--tl);border-radius:11px;padding:13px;text-align:center">
+      <div style="font-size:24px;margin-bottom:4px">&#128665;</div>
+      <div style="font-size:12px;font-weight:700;color:var(--td)">Smart Commute</div>
+      <div style="font-size:11px;color:var(--mu);margin-top:2px">AI route planning</div>
+    </div>
+    <div style="background:var(--tl);border-radius:11px;padding:13px;text-align:center">
+      <div style="font-size:24px;margin-bottom:4px">&#128138;</div>
+      <div style="font-size:12px;font-weight:700;color:var(--td)">Medications</div>
+      <div style="font-size:11px;color:var(--mu);margin-top:2px">Never miss a dose</div>
+    </div>
+    <div style="background:var(--tl);border-radius:11px;padding:13px;text-align:center">
+      <div style="font-size:24px;margin-bottom:4px">&#129302;</div>
+      <div style="font-size:12px;font-weight:700;color:var(--td)">CivicAssist AI</div>
+      <div style="font-size:11px;color:var(--mu);margin-top:2px">Personalised advice</div>
+    </div>
+  </div>
+  <div style="background:var(--gp);border-radius:11px;padding:14px 16px;margin-bottom:4px;border-left:4px solid var(--g);font-size:13px;color:#7a5800;line-height:1.6">
+    &#128075; <strong>Setup takes under 2 minutes.</strong> Enter your details so CivicEase can personalise everything for you. Your data is stored only on your device.
+  </div>
+  <div class="ob-nav"><span></span><button class="btn bp" style="padding:11px 28px;font-size:14px" onclick="obNext()">Start Setup &#8594;</button></div>
+</div>
+<!-- Step 1: Personal Info -->
+<div class="ob-step" id="os1">
+  <div class="ob-title">👤 About You</div>
+  <div class="ob-sub">Personalises your dashboard and AI assistant.</div>
+  <div class="fg"><label>Full Name *</label><input type="text" id="ob-name" placeholder="e.g. Keisha Brown"></div>
+  <div class="fr">
+    <div class="fg"><label>Occupation</label><input type="text" id="ob-job" placeholder="e.g. Nurse, Teacher"></div>
+    <div class="fg"><label>Sector</label>
+      <select id="ob-sec"><option>Public Sector</option><option>Private Sector</option><option>Self-Employed</option><option>Student</option><option>Other</option></select>
+    </div>
+  </div>
+  <div class="fg"><label>Monthly Income (JMD) *</label><input type="number" id="ob-inc" placeholder="e.g. 85000" min="0"></div>
+  <div class="ob-nav"><button class="ob-back" onclick="obPrev()">← Back</button><button class="btn bp" onclick="obNext()">Next →</button></div>
+</div>
+
+<!-- Step 2: Commute -->
+<div class="ob-step" id="os2">
+  <div class="ob-title">🚌 Your Commute</div>
+  <div class="ob-sub">Helps us give you smart daily travel recommendations.</div>
+  <div class="fg"><label>Home Location *</label><input type="text" id="ob-home" placeholder="e.g. Portmore, St. Catherine"></div>
+  <div class="fg"><label>Work / School Location *</label><input type="text" id="ob-work" placeholder="e.g. New Kingston"></div>
+  <div class="fr">
+    <div class="fg"><label>Work Start Time</label><input type="time" id="ob-wt" value="08:00"></div>
+    <div class="fg"><label>How You Travel</label>
+      <select id="ob-tr"><option>Bus / Route Taxi</option><option>JUTC Bus</option><option>Express Bus</option><option>Drive</option><option>Walk</option></select>
+    </div>
+  </div>
+  <div class="ob-nav"><button class="ob-back" onclick="obPrev()">← Back</button><button class="btn bp" onclick="obNext()">Next →</button></div>
+</div>
+
+<!-- Step 3: Budget -->
+<div class="ob-step" id="os3">
+  <div class="ob-title">💰 Monthly Budget</div>
+  <div class="ob-sub">Set spending limits per category. Leave blank to use defaults.</div>
+  <div id="ob-budget-fields"></div>
+  <div class="ob-nav"><button class="ob-back" onclick="obPrev()">← Back</button><button class="btn bp" onclick="obNext()">Next →</button></div>
+</div>
+
+<!-- Step 4: Health -->
+<div class="ob-step" id="os4">
+  <div class="ob-title">💊 Health Profile</div>
+  <div class="ob-sub">Optional — helps CivicAssist personalise health and meal advice.</div>
+  <div class="fg"><label>Chronic Conditions (optional)</label><input type="text" id="ob-cond" placeholder="e.g. Hypertension, Diabetes (or leave blank)"></div>
+  <div class="fg"><label>Dietary Preference</label>
+    <select id="ob-diet"><option value="">No preference</option><option>Vegetarian</option><option>Diabetic-friendly</option><option>Heart-healthy</option><option>Low sodium</option><option>Gluten-free</option></select>
+  </div>
+  <div class="info-box" style="margin-top:14px">✅ You're all set! Everything can be changed anytime in your profile settings.</div>
+  <div class="ob-nav"><button class="ob-back" onclick="obPrev()">← Back</button><button class="btn bg2" onclick="finishOB()">🚀 Launch CivicEase</button></div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+
+<nav id="sb">
+  <div class="sb-logo">
+    <div class="lm"><div class="li">🏛️</div><div class="lt"><h1>CivicEase</h1><p>Smart Living for Every Citizen</p></div></div>
+  </div>
+  <div class="ns"><div class="nl">Overview</div>
+    <div class="ni active" onclick="nav('dashboard')"><span class="ic">🏠</span> Dashboard</div>
+  </div>
+  <div class="ns"><div class="nl">Finance</div>
+    <div class="ni" onclick="nav('bills')"><span class="ic">💳</span> Bill Payments</div>
+    <div class="ni" onclick="nav('budget')"><span class="ic">📊</span> Budgeting</div>
+    <div class="ni" onclick="nav('receipts')"><span class="ic">🧾</span> Receipts</div>
+  </div>
+  <div class="ns"><div class="nl">Daily Life</div>
+    <div class="ni" onclick="nav('commute')"><span class="ic">🚌</span> Smart Commute</div>
+    <div class="ni" onclick="nav('meds')"><span class="ic">💊</span> Medications</div>
+    <div class="ni" onclick="nav('expiry')"><span class="ic">📦</span> Expiry Tracker</div>
+    <div class="ni" onclick="nav('meals')"><span class="ic">🍽️</span> Meal Planning</div>
+  </div>
+  <div class="ns"><div class="nl">AI Assistant</div>
+    <div class="ni" onclick="nav('chat')"><span class="ic">🤖</span> CivicAssist AI</div>
+  </div>
+  <div class="sb-ft">
+    <div class="uc" onclick="nav('profile')">
+      <div class="av" id="sb-av">?</div>
+      <div class="ui"><p id="sb-name">Your Name</p><span id="sb-sec">Set up profile</span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ MAIN ═══════════ -->
+
+<div id="mn">
+  <div class="tb">
+    <div><div class="tb-t" id="pg-title">Dashboard</div><div class="tb-s" id="pg-sub">Loading…</div></div>
+    <div class="db" id="date-el"></div>
+  </div>
+  <div class="pc">
+
+```
+<!-- DASHBOARD -->
+<div class="pg active" id="pg-dashboard">
+  <div class="wb">
+    <h2 id="d-greet">Good morning 👋</h2>
+    <p id="d-sum">Here's your daily overview.</p>
+    <div class="qa">
+      <button class="qb" onclick="nav('bills')">💳 Pay Bills</button>
+      <button class="qb" onclick="nav('meds')">💊 Medications</button>
+      <button class="qb" onclick="nav('meals')">🍽️ Meal Plan</button>
+      <button class="qb" onclick="nav('chat')">🤖 CivicAssist</button>
+    </div>
+  </div>
+  <div class="g4" style="margin-bottom:18px">
+    <div class="sc bg-t"><div class="sl">Monthly Income</div><div class="sv" id="d-inc">–</div><div class="sch">Your salary</div></div>
+    <div class="sc bg-g"><div class="sl">Spent So Far</div><div class="sv" id="d-sp">–</div><div class="sch">This month</div></div>
+    <div class="sc bg-r"><div class="sl">Bills Unpaid</div><div class="sv" id="d-bi">–</div><div class="sch">Need attention</div></div>
+    <div class="sc bg-t2"><div class="sl">Meds Pending</div><div class="sv" id="d-me">–</div><div class="sch">Today</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct">Budget Overview</div><div class="cs">Top spending categories</div><div id="d-bars"></div></div>
+    <div class="card"><div class="ct">Upcoming Bills</div><div class="cs">Next 7 days</div><div id="d-ubills"></div></div>
+  </div>
+  <div class="g2" style="margin-top:16px">
+    <div class="card"><div class="ct">Today's Commute</div><div class="cs">Recommended route</div><div id="d-commute"></div></div>
+    <div class="card"><div class="ct">Expiring Soon</div><div class="cs">Items within 5 days</div><div id="d-expiry"></div></div>
+  </div>
+</div>
+
+<!-- BILLS -->
+<div class="pg" id="pg-bills">
+  <div class="sh"><div class="st">Bill Payments</div><button class="btn bp bsm" onclick="openM('m-bill')">+ Add Bill</button></div>
+  <div class="g4" style="margin-bottom:18px">
+    <div class="sc bg-t"><div class="sl">Total Due</div><div class="sv" id="bi-due">–</div><div class="sch">Unpaid</div></div>
+    <div class="sc bg-g"><div class="sl">Paid</div><div class="sv" id="bi-pd">–</div><div class="sch">This month</div></div>
+    <div class="sc bg-r"><div class="sl">Overdue</div><div class="sv" id="bi-ov">–</div><div class="sch">Past due date</div></div>
+    <div class="sc bg-t2"><div class="sl">Due in 7 Days</div><div class="sv" id="bi-up">–</div><div class="sch">Upcoming</div></div>
+  </div>
+  <div class="card"><div id="bills-list"></div></div>
+</div>
+
+<!-- BUDGET -->
+<div class="pg" id="pg-budget">
+  <div class="sh">
+    <div class="st">Budgeting</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn bo bsm" onclick="openM('m-blim')">✏️ Edit Limits</button>
+      <button class="btn bp bsm" onclick="openM('m-exp')">+ Add Expense</button>
+    </div>
+  </div>
+  <div class="g4" style="margin-bottom:18px">
+    <div class="sc bg-t"><div class="sl">Monthly Income</div><div class="sv" id="bu-inc">–</div><div class="sch">After tax</div></div>
+    <div class="sc bg-g"><div class="sl">Total Budgeted</div><div class="sv" id="bu-tot">–</div><div class="sch">Allocated</div></div>
+    <div class="sc bg-r"><div class="sl">Total Spent</div><div class="sv" id="bu-sp">–</div><div class="sch">This month</div></div>
+    <div class="sc bg-t2"><div class="sl">Remaining</div><div class="sv" id="bu-rm">–</div><div class="sch">Available</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct">Category Budgets</div><div class="cs">Limits and current spend</div><div id="cat-buds"></div></div>
+    <div class="card"><div class="ct">Recent Expenses</div><div class="cs">Latest transactions</div><div id="exp-list"></div></div>
+  </div>
+</div>
+
+<!-- RECEIPTS -->
+<div class="pg" id="pg-receipts">
+  <div class="sh"><div class="st">Receipt Upload</div><button class="btn bp bsm" onclick="openM('m-rec')">+ Add Receipt</button></div>
+  <div class="card" style="margin-bottom:16px">
+    <div onclick="openM('m-rec')" style="border:2px dashed var(--bd);border-radius:11px;padding:28px;text-align:center;cursor:pointer;background:var(--tl);transition:all .2s" onmouseover="this.style.borderColor='var(--t)'" onmouseout="this.style.borderColor='var(--bd)'">
+      <div style="font-size:34px;margin-bottom:7px">📸</div>
+      <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:14px;color:var(--td)">Upload a Receipt</div>
+      <div style="font-size:12px;color:var(--mu);margin-top:3px">Log purchase details — automatically added to budget tracking</div>
+    </div>
+  </div>
+  <div class="card"><div class="ct">Saved Receipts</div><div class="cs">All uploaded receipts</div><div id="rec-list"></div></div>
+</div>
+
+<!-- COMMUTE -->
+<div class="pg" id="pg-commute">
+  <div class="sh"><div class="st">Smart Commute</div><button class="btn bp bsm" onclick="openM('m-com')">⚙ Update Route</button></div>
+  <div class="g2" style="margin-bottom:16px">
+    <div class="rc">
+      <div style="font-size:10px;opacity:.6;margin-bottom:3px;letter-spacing:.8px;font-weight:600">RECOMMENDED ROUTE TODAY</div>
+      <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:800;margin-bottom:13px" id="rt-title">–</div>
+      <div id="rt-steps"></div>
+      <div style="margin-top:13px;padding-top:13px;border-top:1px solid rgba(255,255,255,.2);display:flex;justify-content:space-between">
+        <div><div style="font-size:9px;opacity:.6;font-weight:600">TIME</div><div style="font-family:'Playfair Display',serif;font-size:19px;font-weight:900" id="rt-time">–</div></div>
+        <div><div style="font-size:9px;opacity:.6;font-weight:600">FARE</div><div style="font-family:'Playfair Display',serif;font-size:19px;font-weight:900" id="rt-fare">–</div></div>
+        <div><div style="font-size:9px;opacity:.6;font-weight:600">DEPART BY</div><div style="font-family:'Playfair Display',serif;font-size:19px;font-weight:900" id="rt-dep">–</div></div>
+      </div>
+    </div>
+    <div class="card"><div class="ct">Commute Tips</div><div class="cs">Personalised for your route</div><div id="com-tips"></div></div>
+  </div>
+  <div class="card"><div class="ct">Alternate Routes</div><div class="cs">Other options</div><div id="com-alts"></div></div>
+</div>
+
+<!-- MEDICATIONS -->
+<div class="pg" id="pg-meds">
+  <div class="sh"><div class="st">Medications</div><button class="btn bp bsm" onclick="openM('m-med')">+ Add Medication</button></div>
+  <div class="g3" style="margin-bottom:16px" id="med-cards"></div>
+  <div class="card"><div class="ct">Today's Schedule</div><div class="cs">All doses for today</div><div id="med-sched"></div></div>
+</div>
+
+<!-- EXPIRY -->
+<div class="pg" id="pg-expiry">
+  <div class="sh"><div class="st">Expiry Tracker</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn bg2 bsm" onclick="openScanner()">&#128247; Scan Barcode</button>
+      <button class="btn bp bsm" onclick="openM('m-item')">+ Add Item</button>
+    </div>
+  </div>
+  <div class="g3" style="margin-bottom:16px">
+    <div class="sc bg-r"><div class="sl">Expired</div><div class="sv" id="ex-exp">0</div><div class="sch">Remove immediately</div></div>
+    <div class="sc bg-g"><div class="sl">Expiring Soon</div><div class="sv" id="ex-sn">0</div><div class="sch">Within 5 days</div></div>
+    <div class="sc bg-t"><div class="sl">Good Stock</div><div class="sv" id="ex-ok">0</div><div class="sch">More than 5 days</div></div>
+  </div>
+  <div class="card"><div id="expiry-list"></div></div>
+</div>
+
+<!-- MEALS -->
+<div class="pg" id="pg-meals">
+  <div class="sh"><div class="st">Meal Planning</div><button class="btn bg2 bsm" onclick="genMeals()">🤖 AI Generate Week</button></div>
+  <div class="g3" style="margin-bottom:16px">
+    <div class="sc bg-t"><div class="sl">Meals Planned</div><div class="sv" id="ml-cnt">0/21</div><div class="sch">This week</div></div>
+    <div class="sc bg-g"><div class="sl">Est. Weekly Cost</div><div class="sv" id="ml-cost">J$0</div><div class="sch">AI estimated</div></div>
+    <div class="sc bg-t2"><div class="sl">Diet Setting</div><div class="sv" style="font-size:13px;padding-top:5px" id="ml-diet">–</div><div class="sch">From profile</div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="ct">Weekly Meal Plan</div><div class="cs">Click any slot to add or edit</div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:12px" id="meal-grid"></div>
+  </div>
+  <div class="card">
+    <div class="sh" style="margin-bottom:9px">
+      <div class="ct">Shopping List</div>
+      <button class="btn bo bsm" onclick="genShop()">Generate from Meals</button>
+    </div>
+    <div id="shop-list"><div class="es"><div class="ei">🛒</div><p>Click "Generate from Meals" to create your list</p></div></div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="pg" id="pg-chat">
+  <div id="server-banner" style="background:var(--gp);border:1px solid var(--g);border-radius:10px;padding:11px 15px;margin-bottom:12px;font-size:12.5px;color:#7a5800;display:none">
+    ⚠️ <strong>Server not configured yet.</strong> Update the <code>SERVER_URL</code> in the HTML with your Render URL, then redeploy.
+  </div>
+  <div class="cm" id="chat-msgs"></div>
+  <div class="cib">
+    <input type="text" id="chat-in" placeholder="Ask CivicAssist anything about your finances, health, meals, commute…" onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="cs2" onclick="sendChat()" title="Send">➤</button>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="pg" id="pg-profile">
+  <div class="sh"><div class="st">My Profile</div><button class="btn bp bsm" onclick="saveProf()">💾 Save Changes</button></div>
+  <div class="ps"><h3>👤 Personal Information</h3>
+    <div class="fr"><div class="fg"><label>Full Name</label><input type="text" id="pf-name"></div><div class="fg"><label>Occupation</label><input type="text" id="pf-job"></div></div>
+    <div class="fr">
+      <div class="fg"><label>Sector</label><select id="pf-sec"><option>Public Sector</option><option>Private Sector</option><option>Self-Employed</option><option>Student</option><option>Other</option></select></div>
+      <div class="fg"><label>Monthly Income (JMD)</label><input type="number" id="pf-inc" min="0"></div>
+    </div>
+  </div>
+  <div class="ps"><h3>🚌 Commute Settings</h3>
+    <div class="fr"><div class="fg"><label>Home Location</label><input type="text" id="pf-home"></div><div class="fg"><label>Work / School</label><input type="text" id="pf-work"></div></div>
+    <div class="fr">
+      <div class="fg"><label>Work Start Time</label><input type="time" id="pf-wt"></div>
+      <div class="fg"><label>How You Travel</label><select id="pf-tr"><option>Bus / Route Taxi</option><option>JUTC Bus</option><option>Express Bus</option><option>Drive</option><option>Walk</option></select></div>
+    </div>
+  </div>
+  <div class="ps"><h3>💊 Health Profile</h3>
+    <div class="fr">
+      <div class="fg"><label>Chronic Conditions</label><input type="text" id="pf-cond" placeholder="e.g. Hypertension, Diabetes"></div>
+      <div class="fg"><label>Dietary Preference</label><select id="pf-diet"><option value="">No preference</option><option>Vegetarian</option><option>Diabetic-friendly</option><option>Heart-healthy</option><option>Low sodium</option><option>Gluten-free</option></select></div>
+    </div>
+  </div>
+     <div class="ps" style="border-color:var(--g)">
+    <h3 style="color:var(--td)">🤖 CivicAssist AI — Server Status</h3>
+    <p style="font-size:13px;color:var(--mu);margin-bottom:14px;line-height:1.6">
+      CivicAssist is powered by <strong>Claude (Anthropic)</strong> through a secure backend server. No API key is needed here — it's already configured on the server.
+    </p>
+    <button class="btn bo bsm" onclick="testApiKey()">⚡ Test Server Connection</button>
+    <div id="api-key-status" style="font-size:12.5px;margin-top:12px;min-height:18px"></div>
+    <div style="margin-top:14px;background:var(--tl);border-radius:9px;padding:12px 14px;font-size:12px;color:var(--td);line-height:1.6">
+      🔒 <strong>Your data stays on your device.</strong> Only your chat messages are sent to the server (and then to Anthropic) when you use CivicAssist. All other app data — bills, medications, budget — stays in your browser only.
+    </div>
+  </div>
+     <div class="ps" style="border-color:var(--rp)"><h3 style="color:var(--r)">⚠️ Reset App Data</h3>
+    <p style="font-size:13px;color:var(--mu);margin-bottom:12px">Clears all bills, expenses, medications, pantry items. Profile kept.</p>
+    <button class="btn bd2" onclick="resetData()">Reset All Data</button>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- ═══════════ BARCODE / QR SCANNER MODAL ═══════════ -->
+
+<div id="scan-modal">
+  <div class="scan-box">
+    <div class="scan-header">
+      <span class="scan-title">&#128247; Scan Item Barcode</span>
+      <button class="scan-close" onclick="closeScanner()">&#10005;</button>
+    </div>
+    <div style="position:relative">
+      <video id="scan-video" autoplay playsinline muted></video>
+      <canvas id="scan-canvas" style="display:none"></canvas>
+      <div class="scan-overlay">
+        <div class="scan-frame"><div class="scan-line"></div></div>
+      </div>
+    </div>
+    <div class="scan-footer">
+      <div class="scan-status" id="scan-status">Point your camera at a barcode or QR code</div>
+      <div class="scan-result" id="scan-result">
+        <div class="sr-label">Item Detected</div>
+        <div class="sr-val" id="scan-item-name">–</div>
+        <div style="margin-top:8px"><div class="sr-label">Expiry Date Found</div><div class="sr-val" id="scan-exp-val">–</div></div>
+      </div>
+      <div id="manual-exp-row">
+        <div class="fg" style="margin-bottom:0">
+          <label style="color:rgba(255,255,255,.5);font-size:10px;letter-spacing:.6px">ENTER EXPIRY DATE MANUALLY</label>
+          <input type="date" id="scan-manual-exp" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff">
+        </div>
+      </div>
+      <div class="scan-actions" style="margin-top:12px">
+        <button class="scan-btn scan-secondary" onclick="toggleCamera()" id="scan-cam-btn">&#128247; Switch Camera</button>
+        <button class="scan-btn scan-primary" id="scan-add-btn" onclick="addScannedItem()" style="display:none">+ Add to Pantry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODALS ═══════════ -->
+
+<!-- Bill -->
+
+<div class="mo" id="m-bill"><div class="md">
+  <div class="mh"><span class="mt">Add Bill</span><button class="mc" onclick="closeM('m-bill')">✕</button></div>
+  <div class="fg"><label>Bill Name *</label><input type="text" id="b-name" placeholder="e.g. JPS Electricity, NWC Water"></div>
+  <div class="fr"><div class="fg"><label>Amount (JMD) *</label><input type="number" id="b-amt" placeholder="5000" min="0"></div><div class="fg"><label>Due Date *</label><input type="date" id="b-due"></div></div>
+  <div class="fg"><label>Category</label><select id="b-cat"><option>Electricity</option><option>Water</option><option>Internet</option><option>Phone</option><option>Rent / Mortgage</option><option>Insurance</option><option>Loan Repayment</option><option>Cable / Streaming</option><option>Other</option></select></div>
+  <div class="mf"><button class="btn bo" onclick="closeM('m-bill')">Cancel</button><button class="btn bp" onclick="addBill()">Add Bill</button></div>
+</div></div>
+
+<!-- Expense -->
+
+<div class="mo" id="m-exp"><div class="md">
+  <div class="mh"><span class="mt">Log Expense</span><button class="mc" onclick="closeM('m-exp')">✕</button></div>
+  <div class="fg"><label>Description *</label><input type="text" id="e-name" placeholder="e.g. Grocery run at Hi-Lo"></div>
+  <div class="fr"><div class="fg"><label>Amount (JMD) *</label><input type="number" id="e-amt" placeholder="2500" min="0"></div><div class="fg"><label>Date *</label><input type="date" id="e-date"></div></div>
+  <div class="fg"><label>Category</label><select id="e-cat"><option>Groceries</option><option>Transport</option><option>Healthcare</option><option>Utilities</option><option>Entertainment</option><option>Education</option><option>Clothing</option><option>Personal Care</option><option>Other</option></select></div>
+  <div class="mf"><button class="btn bo" onclick="closeM('m-exp')">Cancel</button><button class="btn bp" onclick="addExpense()">Log Expense</button></div>
+</div></div>
+
+<!-- Budget Limits -->
+
+<div class="mo" id="m-blim"><div class="md">
+  <div class="mh"><span class="mt">Edit Budget Limits</span><button class="mc" onclick="closeM('m-blim')">✕</button></div>
+  <p style="font-size:12.5px;color:var(--mu);margin-bottom:14px">Set your monthly spending limit for each category.</p>
+  <div id="blim-fields"></div>
+  <div class="mf"><button class="btn bo" onclick="closeM('m-blim')">Cancel</button><button class="btn bp" onclick="saveBlim()">Save Limits</button></div>
+</div></div>
+
+<!-- Receipt -->
+
+<div class="mo" id="m-rec"><div class="md">
+  <div class="mh"><span class="mt">Upload Receipt</span><button class="mc" onclick="closeM('m-rec')">✕</button></div>
+  <div class="info-box" style="margin-bottom:14px">Fill in the details below. The expense will be automatically added to your budget tracker.</div>
+  <div class="fg"><label>Vendor / Store Name *</label><input type="text" id="r-vend" placeholder="e.g. Hi-Lo Food Stores, Fontana Pharmacy"></div>
+  <div class="fr"><div class="fg"><label>Amount (JMD) *</label><input type="number" id="r-amt" placeholder="3500" min="0"></div><div class="fg"><label>Date *</label><input type="date" id="r-date"></div></div>
+  <div class="fg"><label>Category</label><select id="r-cat"><option>Groceries</option><option>Pharmacy / Health</option><option>Hardware / Home</option><option>Clothing</option><option>Restaurant / Food</option><option>Transport</option><option>Electronics</option><option>Other</option></select></div>
+  <div class="fg"><label>Notes (optional)</label><textarea id="r-notes" placeholder="e.g. Weekly grocery shop"></textarea></div>
+  <div class="mf"><button class="btn bo" onclick="closeM('m-rec')">Cancel</button><button class="btn bp" onclick="addReceipt()">Save Receipt</button></div>
+</div></div>
+
+<!-- Medication -->
+
+<div class="mo" id="m-med"><div class="md">
+  <div class="mh"><span class="mt">Add Medication</span><button class="mc" onclick="closeM('m-med')">✕</button></div>
+  <div class="fg"><label>Medication Name & Strength *</label><input type="text" id="md-name" placeholder="e.g. Metformin 500mg"></div>
+  <div class="fr"><div class="fg"><label>Dosage *</label><input type="text" id="md-dose" placeholder="e.g. 1 tablet"></div><div class="fg"><label>Frequency</label><select id="md-freq"><option>Once daily</option><option>Twice daily</option><option>Three times daily</option><option>Every 8 hours</option><option>Weekly</option><option>As needed</option></select></div></div>
+  <div class="fr"><div class="fg"><label>Reminder Time</label><input type="time" id="md-time" value="08:00"></div><div class="fg"><label>Pills Remaining</label><input type="number" id="md-stk" placeholder="e.g. 30" min="0"></div></div>
+  <div class="fg"><label>Condition / Purpose</label><input type="text" id="md-cond" placeholder="e.g. Type 2 Diabetes"></div>
+  <div class="fg"><label>Prescribing Doctor</label><input type="text" id="md-doc" placeholder="e.g. Dr. Brown, KPH"></div>
+  <div class="mf"><button class="btn bo" onclick="closeM('m-med')">Cancel</button><button class="btn bp" onclick="addMed()">Add Medication</button></div>
+</div></div>
+
+<!-- Expiry Item -->
+
+<div class="mo" id="m-item"><div class="md">
+  <div class="mh"><span class="mt">Add Pantry Item</span><button class="mc" onclick="closeM('m-item')">✕</button></div>
+  <div class="fg"><label>Item Name *</label><input type="text" id="it-name" placeholder="e.g. Chicken breast, Low-fat milk"></div>
+  <div class="fr"><div class="fg"><label>Category</label><select id="it-cat"><option>Meat / Poultry</option><option>Dairy</option><option>Produce</option><option>Canned Goods</option><option>Dry Goods</option><option>Frozen</option><option>Condiments</option><option>Beverages</option><option>Snacks</option><option>Other</option></select></div><div class="fg"><label>Expiry Date *</label><input type="date" id="it-exp"></div></div>
+  <div class="fg"><label>Quantity (optional)</label><input type="text" id="it-qty" placeholder="e.g. 1 pack, 500g"></div>
+  <div class="mf"><button class="btn bo" onclick="closeM('m-item')">Cancel</button><button class="btn bp" onclick="addItem()">Add Item</button></div>
+</div></div>
+
+<!-- Commute -->
+
+<div class="mo" id="m-com"><div class="md">
+  <div class="mh"><span class="mt">Update Commute Route</span><button class="mc" onclick="closeM('m-com')">✕</button></div>
+  <div class="fg"><label>Home / Starting Point *</label><input type="text" id="cm-home" placeholder="e.g. Portmore, St. Catherine"></div>
+  <div class="fg"><label>Work / Destination *</label><input type="text" id="cm-work" placeholder="e.g. New Kingston"></div>
+  <div class="fr"><div class="fg"><label>Work Start Time</label><input type="time" id="cm-wt" value="08:00"></div><div class="fg"><label>How You Travel</label><select id="cm-tr"><option>Bus / Route Taxi</option><option>JUTC Bus</option><option>Express Bus</option><option>Drive</option><option>Walk</option></select></div></div>
+  <div class="mf"><button class="btn bo" onclick="closeM('m-com')">Cancel</button><button class="btn bp" onclick="saveCom()">Update Route</button></div>
+</div></div>
+
+<!-- Meal Edit -->
+
+<div class="mo" id="m-meal"><div class="md">
+  <div class="mh"><span class="mt" id="meal-et">Edit Meal</span><button class="mc" onclick="closeM('m-meal')">✕</button></div>
+  <input type="hidden" id="meal-ed"><input type="hidden" id="meal-ety">
+  <div class="fg"><label>Meal Name</label><input type="text" id="meal-ev" placeholder="e.g. Rice and peas with jerk chicken"></div>
+  <div class="mf">
+    <button class="btn bd2 bsm" onclick="clearMeal()" style="margin-right:auto">Clear</button>
+    <button class="btn bo" onclick="closeM('m-meal')">Cancel</button>
+    <button class="btn bp" onclick="saveMeal()">Save</button>
+  </div>
+</div></div>
+
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════════════
+// STORAGE
+// ════════════════════════════════════
+const SK='civicease_v3';
+function save(){try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}}
+function load(){try{const r=localStorage.getItem(SK);if(r)return JSON.parse(r)}catch(e){}return null}
+
+const DEF={
+  profile:{name:'',job:'',sector:'Public Sector',income:0,home:'',work:'',wt:'08:00',transport:'Bus / Route Taxi',cond:'',diet:''},
+  bills:[],expenses:[],receipts:[],meds:[],items:[],chatHistory:[],onboarded:false,
+  nextId:{b:1,e:1,r:1,m:1,i:1},
+  budgets:{
+    Groceries:{lim:20000,sp:0},Transport:{lim:8000,sp:0},Healthcare:{lim:10000,sp:0},
+    Utilities:{lim:20000,sp:0},Entertainment:{lim:5000,sp:0},Education:{lim:10000,sp:0},
+    Clothing:{lim:5000,sp:0},'Personal Care':{lim:4000,sp:0},Other:{lim:8000,sp:0}
+  },
+  meals:{Mon:{b:'',l:'',d:''},Tue:{b:'',l:'',d:''},Wed:{b:'',l:'',d:''},Thu:{b:'',l:'',d:''},Fri:{b:'',l:'',d:''},Sat:{b:'',l:'',d:''},Sun:{b:'',l:'',d:''}}
+};
+
+let S=load()||JSON.parse(JSON.stringify(DEF));
+// Ensure all keys exist after potential version updates
+if(!S.nextId)S.nextId={b:100,e:100,r:100,m:100,i:100};
+if(!S.profile)S.profile={...DEF.profile};
+if(!S.chatHistory)S.chatHistory=[];
+if(!S.meals)S.meals=JSON.parse(JSON.stringify(DEF.meals));
+
+// ════════════════════════════════════
+// ONBOARDING
+// ════════════════════════════════════
+let obS=0;
+function initOB(){
+  // Build budget fields
+  const cats=Object.keys(DEF.budgets);
+  document.getElementById('ob-budget-fields').innerHTML=cats.map(c=>`
+    <div class="fr" style="margin-bottom:0">
+      <div class="fg" style="margin-bottom:9px">
+        <label>${c}</label>
+        <input type="number" id="ob-b-${c.replace(/[\s/]+/g,'-')}" placeholder="e.g. 15000" min="0" value="${S.budgets[c]?.lim||''}">
+      </div>
+    </div>`).join('');
+  // Only skip onboarding if user has already completed it on THIS device
+  if(S.onboarded && S.profile && S.profile.name){
+    document.getElementById('ob').style.display='none';
+    initApp();
+  } else {
+    // Always show onboarding from step 0 for new users
+    obS=0;
+    document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
+    document.getElementById('os0').classList.add('active');
+    updDots();
+    document.getElementById('ob').style.display='flex';
+  }
+}
+function obNext(){
+  if(obS===1){
+    const name=document.getElementById('ob-name').value.trim();
+    if(!name)return toast('Please enter your name','err');
+    const inc=parseFloat(document.getElementById('ob-inc').value);
+    if(!inc||inc<=0)return toast('Please enter your monthly income','err');
+    S.profile.name=name;S.profile.job=document.getElementById('ob-job').value.trim();
+    S.profile.sector=document.getElementById('ob-sec').value;S.profile.income=inc;
+  }
+  if(obS===2){
+    const h=document.getElementById('ob-home').value.trim(),w=document.getElementById('ob-work').value.trim();
+    if(!h||!w)return toast('Please enter home and work locations','err');
+    S.profile.home=h;S.profile.work=w;
+    S.profile.wt=document.getElementById('ob-wt').value;
+    S.profile.transport=document.getElementById('ob-tr').value;
+  }
+  if(obS===3){
+    Object.keys(DEF.budgets).forEach(c=>{
+      const el=document.getElementById('ob-b-'+c.replace(/[\s/]+/g,'-'));
+      if(el){const v=parseFloat(el.value);if(v>0)S.budgets[c].lim=v;}
+    });
+  }
+  if(obS<4){
+    document.getElementById('os'+obS).classList.remove('active');
+    obS++;
+    document.getElementById('os'+obS).classList.add('active');
+    updDots();
+  }
+}
+function obPrev(){
+  if(obS>0){
+    document.getElementById('os'+obS).classList.remove('active');
+    obS--;document.getElementById('os'+obS).classList.add('active');updDots();
+  }
+}
+function updDots(){
+  for(let i=0;i<5;i++){
+    const d=document.getElementById('od'+i);
+    d.className='od'+(i===obS?' active':i<obS?' done':'');
+  }
+}
+function finishOB(){
+  S.profile.cond=document.getElementById('ob-cond').value.trim();
+  S.profile.diet=document.getElementById('ob-diet').value;
+  S.onboarded=true;save();
+  document.getElementById('ob').style.display='none';
+  initApp();
+}
+
+// ════════════════════════════════════
+// APP INIT
+// ════════════════════════════════════
+function initApp(){
+  // Show warning banner in chat if server URL is still placeholder
+  const banner=document.getElementById('server-banner');
+  if(banner && document.querySelector && typeof document.querySelector === 'function'){
+    // Check happens when chat page opens - handled in renderPg
+  }
+  const now=new Date();
+  document.getElementById('date-el').textContent=now.toLocaleDateString('en-JM',{weekday:'short',month:'long',day:'numeric'});
+  updSidebar();
+  // Set today default for all date inputs
+  const today=now.toISOString().split('T')[0];
+  ['b-due','e-date','r-date','it-exp'].forEach(id=>{const el=document.getElementById(id);if(el&&!el.value)el.value=today;});
+  nav('dashboard');
+}
+function updSidebar(){
+  const p=S.profile;
+  const ini=p.name?p.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2):'?';
+  document.getElementById('sb-av').textContent=ini;
+  document.getElementById('sb-name').textContent=p.name||'Your Name';
+  document.getElementById('sb-sec').textContent=p.sector||'Set up profile';
+}
+
+// ════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════
+const PM={
+  dashboard:['Dashboard','Your daily overview'],bills:['Bill Payments','Manage your bills'],
+  budget:['Budgeting','Track income & expenses'],receipts:['Receipts','Log and track spending'],
+  commute:['Smart Commute','AI-powered route planning'],meds:['Medications','Track prescriptions'],
+  expiry:['Expiry Tracker','Monitor pantry freshness'],meals:['Meal Planning','Weekly meals & shopping'],
+  chat:['CivicAssist AI','Your personal AI assistant'],profile:['My Profile','Update your settings']
+};
+let _curPg='dashboard';
+function nav(pg){
+  const cur=document.getElementById('pg-'+_curPg);
+  const next=document.getElementById('pg-'+pg);
+  if(!next)return;
+  // Close sidebar on mobile after nav
+  closeSidebar();
+  // Animate out current, in next
+  if(cur&&cur!==next){
+    cur.classList.add('slide-out');
+    setTimeout(()=>{cur.classList.remove('active','slide-out');},180);
+  }
+  setTimeout(()=>{
+    document.querySelectorAll('.pg').forEach(p=>{if(p!==next)p.classList.remove('active');});
+    next.classList.add('active','slide-in');
+    setTimeout(()=>next.classList.remove('slide-in'),300);
+  },cur&&cur!==next?100:0);
+  _curPg=pg;
+  // Sidebar nav highlights
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>{if(n.getAttribute('onclick')?.includes("'"+pg+"'"))n.classList.add('active');});
+  // Bottom nav highlights
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));
+  const bn=document.getElementById('bn-'+pg);if(bn)bn.classList.add('active');
+  // Page title
+  const[t,s]=PM[pg]||[pg,''];
+  document.getElementById('pg-title').textContent=t;
+  const h=new Date().getHours(),g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('pg-sub').textContent=pg==='dashboard'?`${g}, ${S.profile.name||'there'}`:s;
+  renderPg(pg);
+}
+function renderPg(pg){
+  const fn={dashboard:rDash,bills:rBills,budget:rBudget,receipts:rReceipts,commute:rCommute,meds:rMeds,expiry:rExpiry,meals:rMeals,profile:rProfile,
+    chat:()=>{
+      // Show banner if server URL is placeholder
+      const banner=document.getElementById('server-banner');
+      if(banner){banner.style.display=document.body.innerHTML.includes('YOUR-APP-NAME.onrender.com')?'block':'none';}
+      if(S.chatHistory.length>0)restoreChat();else initChat();
+    }};
+  if(fn[pg])fn[pg]();
+}
+
+// ════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════
+function openM(id){
+  document.getElementById(id).classList.add('open');
+  const today=new Date().toISOString().split('T')[0];
+  ['b-due','e-date','r-date','it-exp'].forEach(fid=>{const el=document.getElementById(fid);if(el&&!el.value)el.value=today;});
+  if(id==='m-com'){
+    document.getElementById('cm-home').value=S.profile.home||'';
+    document.getElementById('cm-work').value=S.profile.work||'';
+    document.getElementById('cm-wt').value=S.profile.wt||'08:00';
+    document.getElementById('cm-tr').value=S.profile.transport||'Bus / Route Taxi';
+  }
+  if(id==='m-blim'){
+    document.getElementById('blim-fields').innerHTML=Object.keys(S.budgets).map(c=>`
+      <div class="fg" style="margin-bottom:10px">
+        <label>${c}</label>
+        <input type="number" id="bl-${c.replace(/[\s/]+/g,'-')}" value="${S.budgets[c].lim}" min="0">
+      </div>`).join('');
+  }
+}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='show '+type;
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className='',3200);
+}
+function fmt(n){return 'J$'+Number(n||0).toLocaleString();}
+function days(d){return Math.ceil((new Date(d)-new Date(new Date().toDateString()))/86400000);}
+function uid(k){const id=S.nextId[k]++;save();return id;}
+function fmtT(t){if(!t)return'';const[h,m]=t.split(':').map(Number);return`${h%12||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`;}
+function addH(t,h){const[hh,mm]=t.split(':').map(Number);return String((hh+h)%24).padStart(2,'0')+':'+String(mm).padStart(2,'0');}
+
+// ════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════
+function rDash(){
+  const p=S.profile;
+  const h=new Date().getHours(),g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('d-greet').textContent=`${g}, ${p.name||'there'} 👋`;
+  const ub=S.bills.filter(b=>!b.paid).length,pm=S.meds.filter(m=>!m.taken).length;
+  document.getElementById('d-sum').textContent=`You have ${ub} unpaid bill${ub!==1?'s':''} and ${pm} pending medication dose${pm!==1?'s':''} today.`;
+  document.getElementById('d-inc').textContent=fmt(p.income);
+  const ts=Object.values(S.budgets).reduce((a,b)=>a+b.sp,0);
+  document.getElementById('d-sp').textContent=fmt(ts);
+  document.getElementById('d-bi').textContent=ub;
+  document.getElementById('d-me').textContent=pm;
+
+  // Budget bars
+  const top=Object.entries(S.budgets).filter(([,b])=>b.lim>0).sort(([,a],[,b])=>b.sp-a.sp).slice(0,4);
+  const clrs=['#0d7a72','#d4a017','#c0392b','#12a89d'];
+  document.getElementById('d-bars').innerHTML=top.length?top.map(([c,b],i)=>{
+    const p=b.lim>0?Math.min(100,Math.round(b.sp/b.lim*100)):0;
+    const cl=p>85?'#c0392b':p>60?'#d4a017':clrs[i];
+    return`<div style="margin-bottom:11px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+        <span style="font-weight:600">${c}</span><span style="color:var(--mu)">${fmt(b.sp)} / ${fmt(b.lim)}</span>
+      </div><div class="pb"><div class="pf" style="width:${p}%;background:${cl}"></div></div>
+    </div>`;
+  }).join(''):'<div class="es" style="padding:16px 0"><div class="ei">📊</div><p>Add expenses to see budget overview</p></div>';
+
+  // Upcoming bills
+  const upcoming=S.bills.filter(b=>!b.paid).sort((a,b)=>new Date(a.due)-new Date(b.due)).slice(0,3);
+  document.getElementById('d-ubills').innerHTML=upcoming.length?upcoming.map(b=>{
+    const d=days(b.due);
+    return`<div class="li2">
+      <div class="lic" style="background:var(--tl)">${bIco(b.cat)}</div>
+      <div class="lif"><strong>${b.name}</strong><span>${d<0?Math.abs(d)+'d overdue':d===0?'Due today':'Due in '+d+'d'}</span></div>
+      <div class="lam" style="color:${d<0?'var(--r)':'var(--tx)'}">${fmt(b.amt)}</div>
+    </div>`;
+  }).join(''):'<div class="es" style="padding:14px 0"><div class="ei">🎉</div><p>No unpaid bills!</p></div>';
+
+  // Commute
+  if(p.home&&p.work){
+    document.getElementById('d-commute').innerHTML=`
+      <div style="display:flex;align-items:center;gap:11px;padding:11px;background:var(--td);border-radius:11px;color:#fff;border-left:4px solid var(--g)">
+        <span style="font-size:22px">🚌</span>
+        <div><div style="font-size:13px;font-weight:600">${p.home} → ${p.work}</div>
+        <div style="font-size:11.5px;opacity:.7;margin-top:2px">Depart by ${depTime(p.wt)} · ${comTime(p.home)} · ${comFare(p.transport)}</div></div>
+      </div>`;
+  }else{
+    document.getElementById('d-commute').innerHTML=`<div class="es" style="padding:14px 0"><div class="ei">🚌</div><p><a href="#" onclick="nav('profile')" style="color:var(--t)">Set up your commute</a> in Profile</p></div>`;
+  }
+
+  // Expiry
+  const exp=S.items.filter(i=>days(i.exp)<=5).sort((a,b)=>days(a.exp)-days(b.exp));
+  document.getElementById('d-expiry').innerHTML=exp.length?exp.map(i=>{
+    const d=days(i.exp);
+    const[cl,bg]=d<0?['var(--r)','var(--rp)']:d<=2?['#b45309','#fff7ed']:['#7a5800','var(--gp)'];
+    return`<div class="li2"><div class="lif"><strong>${i.name}</strong><span>${i.cat}</span></div>
+      <span class="tag" style="background:${bg};color:${cl}">${d<0?'Expired':d===0?'Today':d+'d left'}</span></div>`;
+  }).join(''):'<div class="es" style="padding:14px 0"><div class="ei">✅</div><p>All items fresh</p></div>';
+}
+
+// ════════════════════════════════════
+// BILLS
+// ════════════════════════════════════
+function bIco(c){const m={Electricity:'⚡',Water:'💧',Internet:'📶',Phone:'📱','Rent / Mortgage':'🏠',Insurance:'🛡️','Loan Repayment':'🏦','Cable / Streaming':'📺',Other:'📄'};return m[c]||'📄';}
+function rBills(){
+  const up=S.bills.filter(b=>!b.paid),pd=S.bills.filter(b=>b.paid);
+  document.getElementById('bi-due').textContent=fmt(up.reduce((s,b)=>s+b.amt,0));
+  document.getElementById('bi-pd').textContent=fmt(pd.reduce((s,b)=>s+b.amt,0));
+  document.getElementById('bi-ov').textContent=up.filter(b=>days(b.due)<0).length;
+  document.getElementById('bi-up').textContent=up.filter(b=>{const d=days(b.due);return d>=0&&d<=7;}).length;
+  const sorted=[...S.bills].sort((a,b)=>a.paid!==b.paid?a.paid?1:-1:new Date(a.due)-new Date(b.due));
+  document.getElementById('bills-list').innerHTML=sorted.length?sorted.map(b=>{
+    const d=days(b.due);
+    const st=b.paid?'<span class="tag tg">✓ Paid</span>':d<0?`<span class="tag tr">Overdue ${Math.abs(d)}d</span>`:d<=3?'<span class="tag ty">Due Soon</span>':'<span class="tag tt">Upcoming</span>';
+    return`<div class="li2">
+      <div class="lic" style="background:var(--tl)">${bIco(b.cat)}</div>
+      <div class="lif"><strong>${b.name}</strong><span>${b.cat} · Due ${b.due}</span></div>
+      <div style="display:flex;align-items:center;gap:7px;flex-shrink:0">
+        ${st}<div class="lam">${fmt(b.amt)}</div>
+        ${!b.paid?`<button class="btn bp bsm" onclick="payBill(${b.id})">Pay Now</button>`:`<button class="btn bo bsm" onclick="unpayBill(${b.id})">Undo</button>`}
+        <button class="btn bd2 bsm" onclick="delBill(${b.id})">✕</button>
+      </div>
+    </div>`;
+  }).join(''):'<div class="es"><div class="ei">💳</div><p>No bills yet. Click "+ Add Bill" to start.</p></div>';
+}
+function addBill(){
+  const name=document.getElementById('b-name').value.trim();
+  const amt=parseFloat(document.getElementById('b-amt').value);
+  const due=document.getElementById('b-due').value;
+  const cat=document.getElementById('b-cat').value;
+  if(!name)return toast('Please enter a bill name','err');
+  if(!amt||amt<=0)return toast('Please enter a valid amount','err');
+  if(!due)return toast('Please select a due date','err');
+  S.bills.push({id:uid('b'),name,amt,due,cat,paid:false});
+  save();closeM('m-bill');
+  document.getElementById('b-name').value='';document.getElementById('b-amt').value='';
+  rBills();toast('Bill added ✓','ok');
+}
+function payBill(id){const b=S.bills.find(b=>b.id===id);if(!b)return;b.paid=true;save();rBills();rDash();toast(`${b.name} marked as paid ✓`,'ok');}
+function unpayBill(id){const b=S.bills.find(b=>b.id===id);if(b){b.paid=false;save();rBills();}}
+function delBill(id){S.bills=S.bills.filter(b=>b.id!==id);save();rBills();toast('Bill removed','');}
+
+// ════════════════════════════════════
+// BUDGET
+// ════════════════════════════════════
+function rBudget(){
+  const ts=Object.values(S.budgets).reduce((a,b)=>a+b.sp,0);
+  const tb=Object.values(S.budgets).reduce((a,b)=>a+b.lim,0);
+  document.getElementById('bu-inc').textContent=fmt(S.profile.income);
+  document.getElementById('bu-tot').textContent=fmt(tb);
+  document.getElementById('bu-sp').textContent=fmt(ts);
+  document.getElementById('bu-rm').textContent=fmt((S.profile.income||0)-ts);
+  const clrs={Groceries:'#0d7a72',Transport:'#d4a017',Healthcare:'#c0392b',Utilities:'#12a89d',Entertainment:'#8b6914',Education:'#0a4a45',Clothing:'#5a6a8a','Personal Care':'#6a4a7a',Other:'#5a8a86'};
+  document.getElementById('cat-buds').innerHTML=Object.entries(S.budgets).map(([c,b])=>{
+    const p=b.lim>0?Math.min(100,Math.round(b.sp/b.lim*100)):0;
+    const cl=p>85?'#c0392b':p>60?'#d4a017':(clrs[c]||'#0d7a72');
+    return`<div style="margin-bottom:13px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:12.5px;font-weight:600">${c}</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:11.5px;color:var(--mu)">${fmt(b.sp)} / ${fmt(b.lim)}</span>
+          <span class="tag ${p>85?'tr':p>60?'ty':'tg'}">${p}%</span>
+        </div>
+      </div><div class="pb"><div class="pf" style="width:${p}%;background:${cl}"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('exp-list').innerHTML=S.expenses.length?[...S.expenses].reverse().slice(0,12).map(e=>
+    `<div class="li2">
+      <div class="lif"><strong>${e.name}</strong><span>${e.cat} · ${e.date}</span></div>
+      <div style="display:flex;align-items:center;gap:7px;flex-shrink:0">
+        <span class="tag tt">${e.cat}</span>
+        <div class="lam" style="color:var(--r)">${fmt(e.amt)}</div>
+        <button class="btn bd2 bsm" onclick="delExp(${e.id})">✕</button>
+      </div>
+    </div>`).join(''):'<div class="es"><div class="ei">💸</div><p>No expenses yet. Start logging!</p></div>';
+}
+function addExpense(){
+  const name=document.getElementById('e-name').value.trim();
+  const amt=parseFloat(document.getElementById('e-amt').value);
+  const date=document.getElementById('e-date').value;
+  const cat=document.getElementById('e-cat').value;
+  if(!name)return toast('Please enter a description','err');
+  if(!amt||amt<=0)return toast('Please enter a valid amount','err');
+  if(!date)return toast('Please select a date','err');
+  S.expenses.push({id:uid('e'),name,amt,date,cat});
+  if(S.budgets[cat]){
+    S.budgets[cat].sp+=amt;
+    if(S.budgets[cat].sp>S.budgets[cat].lim)toast(`⚠️ Over ${cat} budget limit!`,'err');
+  }
+  save();closeM('m-exp');
+  document.getElementById('e-name').value='';document.getElementById('e-amt').value='';
+  rBudget();toast('Expense logged ✓','ok');
+}
+function delExp(id){
+  const e=S.expenses.find(e=>e.id===id);
+  if(e&&S.budgets[e.cat])S.budgets[e.cat].sp=Math.max(0,S.budgets[e.cat].sp-e.amt);
+  S.expenses=S.expenses.filter(e=>e.id!==id);save();rBudget();
+}
+function saveBlim(){
+  Object.keys(S.budgets).forEach(c=>{
+    const el=document.getElementById('bl-'+c.replace(/[\s/]+/g,'-'));
+    if(el){const v=parseFloat(el.value);if(v>=0)S.budgets[c].lim=v;}
+  });
+  save();closeM('m-blim');rBudget();toast('Budget limits updated ✓','ok');
+}
+
+// ════════════════════════════════════
+// RECEIPTS
+// ════════════════════════════════════
+function rReceipts(){
+  document.getElementById('rec-list').innerHTML=S.receipts.length?[...S.receipts].reverse().map(r=>
+    `<div class="li2">
+      <div class="lic" style="background:var(--tl)">🧾</div>
+      <div class="lif"><strong>${r.vend}</strong><span>${r.cat} · ${r.date}${r.notes?' · '+r.notes:''}</span></div>
+      <div style="display:flex;align-items:center;gap:7px;flex-shrink:0">
+        <span class="tag tt">${r.cat}</span>
+        <div class="lam">${fmt(r.amt)}</div>
+        <button class="btn bd2 bsm" onclick="delRec(${r.id})">✕</button>
+      </div>
+    </div>`).join(''):'<div class="es"><div class="ei">🧾</div><p>No receipts yet. Add your first one!</p></div>';
+}
+function addReceipt(){
+  const vend=document.getElementById('r-vend').value.trim();
+  const amt=parseFloat(document.getElementById('r-amt').value);
+  const date=document.getElementById('r-date').value;
+  const cat=document.getElementById('r-cat').value;
+  const notes=document.getElementById('r-notes').value.trim();
+  if(!vend)return toast('Please enter the vendor name','err');
+  if(!amt||amt<=0)return toast('Please enter a valid amount','err');
+  if(!date)return toast('Please select a date','err');
+  S.receipts.push({id:uid('r'),vend,amt,date,cat,notes});
+  // Auto-log expense
+  const ec=cat.includes('Grocer')?'Groceries':cat.includes('Pharm')||cat.includes('Health')?'Healthcare':cat==='Transport'?'Transport':'Other';
+  S.expenses.push({id:uid('e'),name:vend,amt,date,cat:ec});
+  if(S.budgets[ec])S.budgets[ec].sp+=amt;
+  save();closeM('m-rec');
+  ['r-vend','r-amt','r-notes'].forEach(id=>document.getElementById(id).value='');
+  rReceipts();toast('Receipt saved & expense logged ✓','ok');
+}
+function delRec(id){S.receipts=S.receipts.filter(r=>r.id!==id);save();rReceipts();}
+
+// ════════════════════════════════════
+// COMMUTE
+// ════════════════════════════════════
+function comTime(h){const hl=h.toLowerCase();if(hl.includes('portmore')||hl.includes('st. catherine'))return'40-55 min';if(hl.includes('spanish town'))return'35-50 min';if(hl.includes('kingston'))return'15-30 min';return'30-45 min';}
+function comFare(m){if(!m||m.includes('Walk'))return'Free';if(m.includes('Express'))return'J$250-350';if(m.includes('JUTC'))return'J$100-180';return'J$120-200';}
+function depTime(wt){if(!wt)return'7:00 AM';const[h,m]=wt.split(':').map(Number);const dep=h*60+m-45;const dh=Math.floor(dep/60),dm=dep%60;return`${dh%12||12}:${String(dm).padStart(2,'0')} ${dh<12?'AM':'PM'}`;}
+
+function rCommute(){
+  const p=S.profile;
+  if(!p.home||!p.work){
+    document.getElementById('rt-title').textContent='Route not configured';
+    document.getElementById('rt-steps').innerHTML='<div style="color:rgba(255,255,255,.7);font-size:13px;padding:10px 0">Click "Update Route" to set up your daily commute.</div>';
+    ['rt-time','rt-fare','rt-dep'].forEach(id=>document.getElementById(id).textContent='–');
+  }else{
+    document.getElementById('rt-title').textContent=`${p.home} → ${p.work}`;
+    document.getElementById('rt-time').textContent=comTime(p.home);
+    document.getElementById('rt-fare').textContent=comFare(p.transport);
+    document.getElementById('rt-dep').textContent=depTime(p.wt);
+    const mid=p.home.toLowerCase().includes('portmore')?'Half Way Tree':p.home.toLowerCase().includes('spanish town')?'Three Miles':'Cross Roads';
+    const steps=[
+      {ico:'🏠',txt:p.home,t:depTime(p.wt)},
+      {ico:'🚌',txt:`Board ${p.transport} towards ${mid}`,t:''},
+      {ico:'🔄',txt:`Transfer at ${mid}`,t:''},
+      {ico:'🚌',txt:`Continue to ${p.work}`,t:''},
+      {ico:'💼',txt:p.work,t:fmtT(p.wt)},
+    ];
+    document.getElementById('rt-steps').innerHTML=steps.map(s=>
+      `<div class="rs"><span style="font-size:17px">${s.ico}</span>
+       <div style="flex:1"><div style="font-size:13px;font-weight:600">${s.txt}</div></div>
+       ${s.t?`<div style="font-size:11px;opacity:.65">${s.t}</div>`:''}</div>`).join('');
+  }
+  document.getElementById('com-tips').innerHTML=[
+    {i:'⏰',t:'Leave earlier Mon & Fri',b:'Traffic is 20-30% heavier at week start and end.'},
+    {i:'💰',t:'Consider a monthly pass',b:'Monthly passes save J$1,500-2,500 vs paying daily.'},
+    {i:'🌧️',t:'Check the weather first',b:'Rain significantly increases commute times island-wide.'},
+  ].map(x=>`<div style="display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--bd)">
+    <span style="font-size:18px">${x.i}</span>
+    <div><div style="font-size:13px;font-weight:600;color:var(--td)">${x.t}</div>
+    <div style="font-size:12px;color:var(--mu);margin-top:1px">${x.b}</div></div>
+  </div>`).join('');
+  document.getElementById('com-alts').innerHTML=p.home&&p.work?[
+    {n:`Express Bus — ${p.home||'Home'} to ${p.work||'Work'}`,t:'Faster',f:'J$250-350',note:'Premium, usually air-conditioned'},
+    {n:'Route Taxi direct (no transfer)',t:'Varies',f:'J$150-200',note:'More flexible timing'},
+  ].map(r=>`<div class="li2">
+    <div class="lic" style="background:var(--tl)">🗺️</div>
+    <div class="lif"><strong>${r.n}</strong><span>${r.note}</span></div>
+    <div style="text-align:right;flex-shrink:0"><div style="font-weight:700;font-size:13px">${r.t}</div><div style="font-size:11.5px;color:var(--mu)">${r.f}</div></div>
+  </div>`).join(''):'<div class="es"><div class="ei">🗺️</div><p>Set up your route to see alternatives</p></div>';
+}
+function saveCom(){
+  const h=document.getElementById('cm-home').value.trim(),w=document.getElementById('cm-work').value.trim();
+  if(!h||!w)return toast('Please enter home and work locations','err');
+  S.profile.home=h;S.profile.work=w;
+  S.profile.wt=document.getElementById('cm-wt').value;
+  S.profile.transport=document.getElementById('cm-tr').value;
+  save();closeM('m-com');rCommute();toast('Commute route updated ✓','ok');
+}
+
+// ════════════════════════════════════
+// MEDICATIONS
+// ════════════════════════════════════
+function rMeds(){
+  document.getElementById('med-cards').innerHTML=S.meds.length?S.meds.map(m=>
+    `<div class="mc2">
+      <div class="mci">💊</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--td);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.name}</div>
+        <div style="font-size:11.5px;color:var(--mu);margin-top:2px">${m.dose} · ${m.freq}</div>
+        ${m.cond?`<div style="font-size:11px;color:var(--t);margin-top:2px;font-weight:600">${m.cond}</div>`:''}
+        ${m.stk?`<div style="font-size:11px;color:${m.stk<7?'var(--r)':'var(--mu)'};margin-top:2px">${m.stk} pills left${m.stk<7?' ⚠️ refill soon':''}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+        <span class="tag ${m.taken?'tg':'ty'}">${m.taken?'✓ Taken':'Pending'}</span>
+        <button class="btn bd2 bsm" onclick="delMed(${m.id})">Remove</button>
+      </div>
+    </div>`).join(''):'<div class="es" style="grid-column:1/-1"><div class="ei">💊</div><p>No medications added yet</p></div>';
+  // Build schedule
+  const doses=[];
+  S.meds.forEach(m=>{
+    const times=m.freq==='Twice daily'?[m.time,addH(m.time,12)]:m.freq==='Three times daily'?[m.time,addH(m.time,6),addH(m.time,12)]:m.freq==='Every 8 hours'?[m.time,addH(m.time,8),addH(m.time,16)]:[m.time];
+    times.forEach(t=>doses.push({...m,sched:t}));
+  });
+  doses.sort((a,b)=>a.sched.localeCompare(b.sched));
+  document.getElementById('med-sched').innerHTML=doses.length?doses.map(d=>
+    `<div class="li2">
+      <div class="lic" style="background:var(--gp)">⏰</div>
+      <div class="lif"><strong>${d.name}</strong><span>${d.dose}${d.doc?' · '+d.doc:''}</span></div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:14px">${fmtT(d.sched)}</span>
+        <button class="btn bsm ${d.taken?'bo':'bp'}" onclick="togMed(${d.id})">${d.taken?'✓ Taken':'Mark Taken'}</button>
+      </div>
+    </div>`).join(''):'<div class="es"><div class="ei">⏰</div><p>No doses scheduled</p></div>';
+}
+function addMed(){
+  const name=document.getElementById('md-name').value.trim();
+  const dose=document.getElementById('md-dose').value.trim();
+  if(!name)return toast('Please enter the medication name','err');
+  if(!dose)return toast('Please enter the dosage','err');
+  const freq=document.getElementById('md-freq').value;
+  const time=document.getElementById('md-time').value;
+  const cond=document.getElementById('md-cond').value.trim();
+  const doc=document.getElementById('md-doc').value.trim();
+  const stk=parseInt(document.getElementById('md-stk').value)||0;
+  S.meds.push({id:uid('m'),name,dose,freq,time,cond,doc,stk,taken:false});
+  save();closeM('m-med');
+  ['md-name','md-dose','md-cond','md-doc','md-stk'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('md-time').value='08:00';
+  rMeds();toast('Medication added ✓','ok');
+}
+function togMed(id){
+  const m=S.meds.find(m=>m.id===id);if(!m)return;
+  m.taken=!m.taken;if(m.taken&&m.stk>0)m.stk--;
+  save();rMeds();if(m.taken)toast(`${m.name} marked as taken ✓`,'ok');
+}
+function delMed(id){S.meds=S.meds.filter(m=>m.id!==id);save();rMeds();toast('Medication removed','');}
+
+// ════════════════════════════════════
+// EXPIRY
+// ════════════════════════════════════
+function rExpiry(){
+  document.getElementById('ex-exp').textContent=S.items.filter(i=>days(i.exp)<0).length;
+  document.getElementById('ex-sn').textContent=S.items.filter(i=>{const d=days(i.exp);return d>=0&&d<=5;}).length;
+  document.getElementById('ex-ok').textContent=S.items.filter(i=>days(i.exp)>5).length;
+  const ico=c=>c.includes('Meat')?'🥩':c==='Dairy'?'🥛':c.includes('Produce')?'🥬':c.includes('Canned')?'🥫':c==='Frozen'?'🧊':c.includes('Bev')?'🥤':c==='Snacks'?'🍪':'📦';
+  const sorted=[...S.items].sort((a,b)=>days(a.exp)-days(b.exp));
+  document.getElementById('expiry-list').innerHTML=sorted.length?sorted.map(item=>{
+    const d=days(item.exp);
+    const[cl,bg]=d<0?['var(--r)','var(--rp)']:d<=2?['#b45309','#fff7ed']:d<=5?['#7a5800','var(--gp)']:['var(--td)','var(--tl)'];
+    const lbl=d<0?`Expired ${Math.abs(d)}d ago`:d===0?'Expires today':d<=5?`${d}d left`:`${d}d left`;
+    return`<div class="ir">
+      <div style="display:flex;align-items:center;gap:11px">
+        <div style="width:35px;height:35px;border-radius:10px;background:var(--tl);display:flex;align-items:center;justify-content:center;font-size:17px">${ico(item.cat)}</div>
+        <div><div style="font-weight:600;font-size:13.5px">${item.name}${item.qty?' ('+item.qty+')':''}</div>
+        <div style="font-size:11.5px;color:var(--mu)">${item.cat} · Exp: ${item.exp}</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <span class="tag" style="background:${bg};color:${cl}">${lbl}</span>
+        <button class="btn bd2 bsm" onclick="delItem(${item.id})">Remove</button>
+      </div>
+    </div>`;
+  }).join(''):'<div class="es"><div class="ei">📦</div><p>No items tracked yet. Add pantry items!</p></div>';
+}
+function addItem(){
+  const name=document.getElementById('it-name').value.trim();
+  const exp=document.getElementById('it-exp').value;
+  if(!name)return toast('Please enter the item name','err');
+  if(!exp)return toast('Please select an expiry date','err');
+  S.items.push({id:uid('i'),name,cat:document.getElementById('it-cat').value,exp,qty:document.getElementById('it-qty').value.trim()});
+  save();closeM('m-item');
+  ['it-name','it-qty'].forEach(id=>document.getElementById(id).value='');
+  rExpiry();toast('Item added ✓','ok');
+}
+function delItem(id){S.items=S.items.filter(i=>i.id!==id);save();rExpiry();}
+
+// ════════════════════════════════════
+// MEAL PLANNING
+// ════════════════════════════════════
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const MTE={b:'🌅 Breakfast',l:'☀️ Lunch',d:'🌙 Dinner'};
+const PLANS={
+  default:{b:['Cornmeal porridge & banana','Scrambled eggs on toast','Whole grain cereal & milk','Ackee & saltfish & dumplings','Oat porridge & honey','Boiled banana & eggs','Plantain & eggs'],l:['Rice & peas with jerk chicken','Curry goat & white rice','Stewed chicken & cooked food','Brown stew fish & rice','Veggie stir-fry & noodles','Chicken soup & dumplings','Pelau with pigeon peas'],d:['Steam fish & ground provisions','Pasta with tomato sauce','Callaloo & saltfish & dumplings','Stewed peas & rice','Baked chicken & steamed veg','Stir-fried veg & tofu','Leftover lunch']},
+  'Diabetic-friendly':{b:['Oat porridge (unsweetened)','Boiled egg & whole wheat toast','Green banana porridge','Unsweetened cereal & low-fat milk','Scrambled eggs & tomato','Whole wheat pancakes','Boiled plantain & egg'],l:['Baked fish & green salad','Brown rice & steamed chicken','Whole wheat pasta & veg','Grilled chicken & coleslaw','Lentil soup & grain bread','Vegetable curry & brown rice','Steamed fish & callaloo'],d:['Steamed veg & grilled fish','Chicken stir-fry (low oil)','Bean stew & brown rice','Grilled tilapia & salad','Vegetable soup','Tofu & vegetables','Baked chicken & sweet potato']},
+  'Heart-healthy':{b:['Oat porridge with flaxseed','Whole grain toast & avocado','Fruit salad & yogurt','Low-fat cereal & almond milk','Banana & peanut butter toast','Scrambled eggs (no salt)','Fruit smoothie'],l:['Grilled fish & salad','Vegetable soup & grain bread','Lentil curry & brown rice','Chicken salad (no mayo)','Bean stew & rice','Veggie stir-fry','Sardines & whole crackers'],d:['Steamed fish & veg','Baked chicken & green salad','Bean & vegetable soup','Grilled salmon & spinach','Tofu stir-fry','Brown rice & callaloo','Baked tilapia & coleslaw']},
+  Vegetarian:{b:['Fruit salad & yogurt','Oat porridge & berries','Avocado on toast','Banana smoothie','Fried eggs & toast','Granola & milk','Plantain & ackee'],l:['Vegetable fried rice','Lentil soup & bread','Bean stew & rice','Veggie stir-fry & noodles','Callaloo & dumplings','Chickpea curry & rice','Vegetable wrap'],d:['Pasta primavera','Bean & veg soup','Tofu stir-fry & rice','Vegetable curry','Ratatouille & rice','Stuffed peppers','Lentil stew']},
+  'Low sodium':{b:['Unsalted oat porridge','Fresh fruit & yogurt','Eggs & tomato (no salt)','Banana & nut butter','Whole grain cereal','Avocado toast (no salt)','Fruit smoothie'],l:['Steamed chicken & veg','Brown rice & unsalted beans','Fresh garden salad & fish','Homemade vegetable soup','Baked chicken & salad','Lentil soup (no salt)','Grilled fish & coleslaw'],d:['Baked fish & sweet potato','Herb chicken & greens','Unsalted bean stew','Grilled vegetables & rice','Lemon herb fish & salad','Steamed veg & tofu','Brown rice & callaloo']}
+};
+
+function rMeals(){
+  const diet=S.profile.diet||'';
+  document.getElementById('ml-diet').textContent=diet||'No preference';
+  document.getElementById('meal-grid').innerHTML=DAYS.map(day=>
+    `<div class="dc">
+      <div class="dh">${day}</div>
+      ${['b','l','d'].map(t=>
+        `<div class="ms2 ${S.meals[day][t]?'':'empty'}" onclick="editMeal('${day}','${t}')">
+          <div class="mt2">${MTE[t]}</div>
+          <div class="mn">${S.meals[day][t]||'+ Add'}</div>
+        </div>`).join('')}
+    </div>`).join('');
+  const planned=DAYS.reduce((s,d)=>s+['b','l','d'].filter(t=>S.meals[d][t]).length,0);
+  document.getElementById('ml-cnt').textContent=`${planned}/21`;
+  document.getElementById('ml-cost').textContent='J$'+(planned*900).toLocaleString();
+}
+function editMeal(day,type){
+  document.getElementById('meal-et').textContent=`${day} — ${type==='b'?'Breakfast':type==='l'?'Lunch':'Dinner'}`;
+  document.getElementById('meal-ed').value=day;document.getElementById('meal-ety').value=type;
+  document.getElementById('meal-ev').value=S.meals[day][type]||'';
+  openM('m-meal');
+}
+function saveMeal(){
+  const day=document.getElementById('meal-ed').value,type=document.getElementById('meal-ety').value;
+  S.meals[day][type]=document.getElementById('meal-ev').value.trim();
+  save();closeM('m-meal');rMeals();toast('Meal saved ✓','ok');
+}
+function clearMeal(){
+  const day=document.getElementById('meal-ed').value,type=document.getElementById('meal-ety').value;
+  S.meals[day][type]='';save();closeM('m-meal');rMeals();
+}
+function genMeals(){
+  const diet=S.profile.diet||'';
+  const plan=PLANS[diet]||PLANS.default;
+  DAYS.forEach((day,i)=>['b','l','d'].forEach(t=>S.meals[day][t]=plan[t][i%plan[t].length]));
+  save();rMeals();toast(`🤖 AI meal plan generated (${diet||'General'}) ✓`,'ok');
+}
+function genShop(){
+  const base=['Cooking oil (1 bottle)','Onions & garlic','Seasonings & herbs','Salt & black pepper'];
+  const all=new Set();DAYS.forEach(d=>['b','l','d'].forEach(t=>{if(S.meals[d][t])all.add(S.meals[d][t].toLowerCase());}));
+  const items=[...base];
+  if([...all].some(m=>m.includes('chicken')))items.push('Chicken (1.5-2 kg)');
+  if([...all].some(m=>m.includes('fish')||m.includes('tilapia')))items.push('Fresh fish / Tilapia (1 kg)');
+  if([...all].some(m=>m.includes('rice')))items.push('Rice (2-3 kg)');
+  if([...all].some(m=>m.includes('peas')||m.includes('bean')||m.includes('lentil')))items.push('Kidney beans / Lentils (1 pack)');
+  if([...all].some(m=>m.includes('egg')||m.includes('ackee')))items.push('Eggs (1 dozen)');
+  if([...all].some(m=>m.includes('pasta')||m.includes('noodle')))items.push('Pasta / Noodles (500g)');
+  if([...all].some(m=>m.includes('plantain')||m.includes('banana')))items.push('Plantains / Bananas (6 pcs)');
+  if([...all].some(m=>m.includes('callaloo')||m.includes('salad')||m.includes('veg')))items.push('Fresh vegetables (mixed)');
+  if([...all].some(m=>m.includes('porridge')||m.includes('oat')))items.push('Oats / Cornmeal (1 pack)');
+  if([...all].some(m=>m.includes('milk')||m.includes('cereal')))items.push('Low-fat milk (1 litre)');
+  if([...all].some(m=>m.includes('bread')||m.includes('toast')))items.push('Whole grain bread (1 loaf)');
+  if([...all].some(m=>m.includes('tofu')))items.push('Tofu (1 block)');
+  const exp=S.items.filter(i=>{const d=days(i.exp);return d>=0&&d<=5;});
+  const expNote=exp.length?`<div style="background:var(--gp);border:1px solid var(--g);border-radius:8px;padding:10px 12px;margin-bottom:11px;font-size:12.5px;color:#7a5800">⚠️ <strong>Use these first (expiring soon):</strong> ${exp.map(i=>i.name).join(', ')}</div>`:'';
+  document.getElementById('shop-list').innerHTML=expNote+`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+    ${items.map(i=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--tl);border-radius:8px;font-size:12.5px;border:1px solid var(--bd)">
+      <input type="checkbox" style="accent-color:var(--t);flex-shrink:0"><span>${i}</span>
+    </div>`).join('')}
+  </div>`;
+  toast('Shopping list generated ✓','ok');
+}
+
+// ════════════════════════════════════
+// PROFILE
+// ════════════════════════════════════
+function rProfile(){
+  const p=S.profile;
+  document.getElementById('pf-name').value=p.name||'';document.getElementById('pf-job').value=p.job||'';
+  document.getElementById('pf-sec').value=p.sector||'Public Sector';document.getElementById('pf-inc').value=p.income||'';
+  document.getElementById('pf-home').value=p.home||'';document.getElementById('pf-work').value=p.work||'';
+  document.getElementById('pf-wt').value=p.wt||'08:00';document.getElementById('pf-tr').value=p.transport||'Bus / Route Taxi';
+  document.getElementById('pf-cond').value=p.cond||'';document.getElementById('pf-diet').value=p.diet||'';
+  // Show server status hint
+  setKeyStatus('Click "Test Server Connection" to verify CivicAssist is working.','var(--mu)');
+}
+function saveProf(){
+  const p=S.profile;
+  p.name=document.getElementById('pf-name').value.trim();p.job=document.getElementById('pf-job').value.trim();
+  p.sector=document.getElementById('pf-sec').value;p.income=parseFloat(document.getElementById('pf-inc').value)||0;
+  p.home=document.getElementById('pf-home').value.trim();p.work=document.getElementById('pf-work').value.trim();
+  p.wt=document.getElementById('pf-wt').value;p.transport=document.getElementById('pf-tr').value;
+  p.cond=document.getElementById('pf-cond').value.trim();p.diet=document.getElementById('pf-diet').value;
+  save();updSidebar();toast('Profile saved ✓','ok');
+}
+function redoSetup(){
+  if(!confirm('This will restart the setup wizard. Your existing data will be kept.'))return;
+  S.onboarded=false;save();
+  obS=0;
+  document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('os0').classList.add('active');
+  updDots();
+  document.getElementById('ob').style.display='flex';
+}
+function resetData(){
+  if(!confirm('Reset all bills, expenses, medications, receipts, and pantry items? Your profile will be kept.'))return;
+  S.bills=[];S.expenses=[];S.meds=[];S.items=[];S.receipts=[];
+  S.meals=JSON.parse(JSON.stringify(DEF.meals));
+  Object.keys(S.budgets).forEach(k=>S.budgets[k].sp=0);
+  S.chatHistory=[];save();nav('dashboard');toast('App data reset','');
+}
+
+// ════════════════════════════════════
+// CIVICASSIST AI CHAT
+// ════════════════════════════════════
+function initChat(){
+  const fn=S.profile.name?S.profile.name.split(' ')[0]:'';
+  const keyNote='';
+  appendMsg('bot',`Hello${fn?', '+fn:''}! I\'m **CivicAssist**, your personal AI assistant.\n\nI have access to your real app data and can give you personalised advice on:\n\n💰 **Budgeting & Bills** — analyse your spending, flag overdue bills\n🚌 **Your Commute** — tips for your specific route\n💊 **Medications** — reminders and adherence\n🍽️ **Meals & Nutrition** — planning based on your diet preference\n📦 **Pantry** — what's expiring and recipe ideas\n\nWhat would you like help with today?`);
+}
+
+function appendMsg(role,text){
+  const c=document.getElementById('chat-msgs');
+  const d=document.createElement('div');
+  d.className='msg '+role;
+  const html=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+  d.innerHTML=`<div class="mav">${role==='bot'?'🤖':'👤'}</div><div class="mb">${html}</div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+  if(role!=='_typing'){
+    S.chatHistory.push({role:role==='bot'?'assistant':'user',content:text});
+    if(S.chatHistory.length>24)S.chatHistory=S.chatHistory.slice(-24);
+    save();
+  }
+}
+function showTyping(){
+  const c=document.getElementById('chat-msgs');
+  const d=document.createElement('div');d.className='msg bot';d.id='typ';
+  d.innerHTML=`<div class="mav">🤖</div><div class="mb"><span class="td"></span><span class="td"></span><span class="td"></span></div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+function rmTyping(){const t=document.getElementById('typ');if(t)t.remove();}
+function restoreChat(){
+  const c=document.getElementById('chat-msgs');c.innerHTML='';
+  const hist=[...S.chatHistory];S.chatHistory=[];
+  hist.forEach(m=>appendMsg(m.role==='assistant'?'bot':'user',m.content));
+}
+
+async function sendChat(){
+  const inp=document.getElementById('chat-in');
+  const text=inp.value.trim();if(!text)return;
+  inp.value='';appendMsg('user',text);showTyping();
+
+  const p=S.profile;
+  const ts=Object.values(S.budgets).reduce((a,b)=>a+b.sp,0);
+  const tb=Object.values(S.budgets).reduce((a,b)=>a+b.lim,0);
+  const rem=(p.income||0)-ts;
+  const ub=S.bills.filter(b=>!b.paid).map(b=>`${b.name} (${fmt(b.amt)}, due ${b.due})`).join('; ')||'None';
+  const ob=S.bills.filter(b=>!b.paid&&days(b.due)<0).map(b=>b.name).join(', ')||'None';
+  const ml=S.meds.map(m=>`${m.name} ${m.dose} ${m.freq} at ${fmtT(m.time)}${m.cond?' for '+m.cond:''}`).join('; ')||'None';
+  const pm=S.meds.filter(m=>!m.taken).map(m=>m.name).join(', ')||'All taken';
+  const ei=S.items.filter(i=>days(i.exp)<=5).map(i=>`${i.name} (${days(i.exp)<0?'expired':days(i.exp)+'d left'})`).join(', ')||'None';
+  const topSp=Object.entries(S.budgets).sort(([,a],[,b])=>b.sp-a.sp).slice(0,3).map(([c,b])=>`${c}: ${fmt(b.sp)}/${fmt(b.lim)}`).join(', ');
+  const mp=DAYS.reduce((s,d)=>s+['b','l','d'].filter(t=>S.meals[d][t]).length,0);
+
+  const sys=`You are CivicAssist — a warm, knowledgeable, and practical AI assistant built into the CivicEase app for Jamaican public sector workers and low-to-middle-income households.
+
+== USER PROFILE ==
+Name: ${p.name||'User'}
+Occupation: ${p.job||'Not set'} (${p.sector||'Not set'})
+Monthly Income: ${fmt(p.income)}
+Commute: ${p.home||'Not set'} → ${p.work||'Not set'} via ${p.transport||'unset'}, starts ${p.wt||'unset'}
+Health conditions: ${p.cond||'None specified'}
+Dietary preference: ${p.diet||'None'}
+
+== FINANCIAL DATA ==
+Total Budget: ${fmt(tb)} | Spent: ${fmt(ts)} | Remaining: ${fmt(rem)}
+Top spending categories: ${topSp||'No expenses yet'}
+Unpaid bills: ${ub}
+Overdue bills: ${ob}
+
+== HEALTH ==
+Medications: ${ml}
+Pending doses today: ${pm}
+
+== HOUSEHOLD ==
+Items expiring soon: ${ei}
+Meals planned this week: ${mp}/21
+
+== YOUR ROLE ==
+- Give personalised, specific advice using the user's ACTUAL numbers above — mention real bill names, exact amounts, specific categories
+- Reference their real data to make answers concrete and useful
+- Use Jamaican context: JPS, NWC, Flow/Digicel, JUTC, Kingston, Portmore, Half Way Tree, Sovereign, etc.
+- Be warm, direct, and practical — like a trusted friend with financial and health knowledge
+- Format: use **bold** for key points, keep answers concise unless detail is needed
+- For medications: give general guidance only, always recommend consulting their doctor for medical decisions
+- For budgeting: give specific tips based on their exact spending data
+- If asked about app features, explain clearly how to use them`;
+
+  const messages=[...S.chatHistory.slice(-14).map(m=>({role:m.role,content:m.content})),{role:'user',content:text}];
+
+  // ── CONFIGURE: replace with your Render URL after deploying ──
+  const SERVER_URL = 'https://YOUR-APP-NAME.onrender.com/chat';
+
+  try{
+    const res=await fetch(SERVER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages})
+    });
+    const data=await res.json();rmTyping();
+    if(data.error){
+      if(data.error.type==='authentication_error'){
+        appendMsg('bot',"There is a server configuration issue. Please contact the app administrator.");
+      }else if(data.error.type==='rate_limit_error'){
+        appendMsg('bot',"**Slow down!** You've sent too many messages too quickly. Please wait a minute and try again.");
+      }else{
+        appendMsg('bot',`Sorry, I ran into an issue: ${data.error.message}. Please try again.`);
+      }
+    }else{
+      appendMsg('bot',data.content?.[0]?.text||"I'm having trouble responding right now. Please try again.");
+    }
+  }catch(e){
+    rmTyping();
+    appendMsg('bot',"I couldn't connect to the server right now. Please check your internet connection and try again.");
+  }
+}
+
+
+// ════════════════════════════════════
+// API KEY MANAGEMENT
+// ════════════════════════════════════
+function saveApiKey(){ testApiKey(); }
+function clearApiKey(){ setKeyStatus('Key management is handled on the server.','var(--mu)'); }
+async function testApiKey(){
+  const key=document.getElementById('pf-apikey').value.trim()||localStorage.getItem('civicease_apikey')||'';
+  if(!key)return setKeyStatus('No key to test. Please enter your key first.','var(--r)');
+  setKeyStatus('Testing connection…','var(--mu)');
+  const SERVER_URL='https://YOUR-APP-NAME.onrender.com/chat';
+  try{
+    const res=await fetch(SERVER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:20,messages:[{role:'user',content:'Say OK only.'}]})
+    });
+    const data=await res.json();
+    if(data.error){
+      setKeyStatus('⚠️ Server error: '+data.error.message,'#b45309');
+    }else{
+      setKeyStatus('✅ Connected! CivicAssist is ready to use.','var(--t)');
+    }
+  }catch(e){
+    setKeyStatus('❌ Could not reach the server. Make sure it is deployed and running.','var(--r)');
+  }
+}
+function setKeyStatus(msg,color){
+  const el=document.getElementById('api-key-status');
+  if(el){el.textContent=msg;el.style.color=color||'var(--mu)';}
+}
+function toggleKeyVis(){}
+
+// ════════════════════════════════════
+// BOOT
+// ════════════════════════════════════
+
+// ════════════════════════════════════
+// SIDEBAR TOGGLE (mobile)
+// ════════════════════════════════════
+function toggleSidebar(){
+  const sb=document.getElementById('sb');
+  const ov=document.getElementById('sb-overlay');
+  const open=sb.classList.toggle('open');
+  ov.classList.toggle('open',open);
+}
+function closeSidebar(){
+  document.getElementById('sb').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+}
+
+// ════════════════════════════════════
+// BARCODE / QR SCANNER
+// ════════════════════════════════════
+let scanStream=null,scanInterval=null,scanFacingMode='environment',scanDetected=false;
+let scannedName='',scannedExp='';
+
+// ZXing loaded lazily
+async function loadZXing(){
+  if(window.ZXing)return window.ZXing;
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/zxing-js/0.20.0/umd/index.min.js';
+    s.onload=()=>res(window.ZXing);
+    s.onerror=()=>rej(new Error('ZXing failed to load'));
+    document.head.appendChild(s);
+  });
+}
+
+async function openScanner(){
+  scanDetected=false;scannedName='';scannedExp='';
+  document.getElementById('scan-result').style.display='none';
+  document.getElementById('scan-add-btn').style.display='none';
+  document.getElementById('manual-exp-row').style.display='none';
+  document.getElementById('scan-status').textContent='Starting camera…';
+  document.getElementById('scan-modal').classList.add('open');
+  try{
+    await startCamera();
+  }catch(e){
+    document.getElementById('scan-status').textContent='Camera not available. Enter details manually below.';
+    document.getElementById('manual-exp-row').style.display='block';
+    document.getElementById('scan-add-btn').style.display='block';
+    document.getElementById('scan-item-name').textContent='Unknown item';
+    document.getElementById('scan-exp-val').textContent='Enter manually';
+    document.getElementById('scan-result').style.display='block';
+    scannedName='Unknown item';
+  }
+}
+
+async function startCamera(){
+  if(scanStream){scanStream.getTracks().forEach(t=>t.stop());}
+  const constraints={video:{facingMode:scanFacingMode,width:{ideal:1280},height:{ideal:720}}};
+  scanStream=await navigator.mediaDevices.getUserMedia(constraints);
+  const vid=document.getElementById('scan-video');
+  vid.srcObject=scanStream;
+  await vid.play();
+  document.getElementById('scan-status').textContent='Scanning… point camera at barcode';
+  startDecoding();
+}
+
+async function startDecoding(){
+  clearInterval(scanInterval);
+  let zx;
+  try{ zx=await loadZXing(); }catch(e){ setScanStatus('Barcode library unavailable. Enter expiry manually.'); showManualEntry(); return; }
+  const hints=new Map();
+  const fmts=[zx.BarcodeFormat.EAN_13,zx.BarcodeFormat.EAN_8,zx.BarcodeFormat.CODE_128,
+    zx.BarcodeFormat.CODE_39,zx.BarcodeFormat.UPC_A,zx.BarcodeFormat.UPC_E,zx.BarcodeFormat.QR_CODE,
+    zx.BarcodeFormat.DATA_MATRIX,zx.BarcodeFormat.PDF_417];
+  hints.set(zx.DecodeHintType.POSSIBLE_FORMATS,fmts);
+  hints.set(zx.DecodeHintType.TRY_HARDER,true);
+  const reader=new zx.MultiFormatReader();
+  reader.setHints(hints);
+  const canvas=document.getElementById('scan-canvas');
+  const ctx=canvas.getContext('2d');
+  scanInterval=setInterval(()=>{
+    if(scanDetected)return;
+    const vid=document.getElementById('scan-video');
+    if(vid.readyState<2)return;
+    canvas.width=vid.videoWidth;canvas.height=vid.videoHeight;
+    ctx.drawImage(vid,0,0);
+    try{
+      const imgData=ctx.getImageData(0,0,canvas.width,canvas.height);
+      const lum=new zx.RGBLuminanceSource(imgData.data,canvas.width,canvas.height);
+      const bmp=new zx.BinaryBitmap(new zx.HybridBinarizer(lum));
+      const result=reader.decode(bmp);
+      if(result){
+        scanDetected=true;
+        handleScanResult(result.getText(),result.getBarcodeFormat());
+      }
+    }catch(e){}
+  },300);
+}
+
+function handleScanResult(code, fmt){
+  setScanStatus('&#10003; Code detected!');
+  // Try to parse as QR with JSON data (e.g. {"name":"Milk","exp":"2025-12-01"})
+  let name='',exp='';
+  try{
+    const parsed=JSON.parse(code);
+    name=parsed.name||parsed.item||parsed.product||'';
+    exp=parsed.exp||parsed.expiry||parsed.expDate||parsed.best_before||'';
+    if(exp&&!/^\d{4}-\d{2}-\d{2}$/.test(exp)){exp=parseExpDate(exp);}
+  }catch(e){
+    // Not JSON — try to extract date pattern from raw string
+    // Patterns: DD/MM/YYYY, MM/YYYY, YYYY-MM-DD, DDMMYYYY etc.
+    const rawDate=extractDateFromString(code);
+    if(rawDate){exp=rawDate;}
+    // Try to use barcode as product lookup hint
+    name=code.length>10?'Scanned Item ('+code.slice(0,8)+'…)':'Scanned Item';
+  }
+  scannedName=name||'Scanned Item';
+  scannedExp=exp||'';
+  document.getElementById('scan-item-name').textContent=scannedName;
+  document.getElementById('scan-exp-val').textContent=scannedExp?formatDisplayDate(scannedExp):'Not found — enter manually';
+  document.getElementById('scan-result').style.display='block';
+  document.getElementById('scan-add-btn').style.display='block';
+  if(!scannedExp){
+    document.getElementById('manual-exp-row').style.display='block';
+    const today=new Date().toISOString().split('T')[0];
+    document.getElementById('scan-manual-exp').value=today;
+  }
+}
+
+function extractDateFromString(str){
+  // Try common date patterns
+  const patterns=[
+    {re:/(\d{4})-(\d{2})-(\d{2})/,fn:m=>m[0]},                      // YYYY-MM-DD
+    {re:/(\d{2})\/(\d{2})\/(\d{4})/,fn:m=>`${m[3]}-${m[2]}-${m[1]}`}, // DD/MM/YYYY
+    {re:/(\d{2})\/(\d{4})/,fn:m=>`${m[2]}-${m[1]}-01`},              // MM/YYYY
+    {re:/(\d{2})(\d{2})(\d{4})/,fn:m=>`${m[3]}-${m[2]}-${m[1]}`},    // DDMMYYYY
+    {re:/BEST BY[:\s]+(\d{2})[\/-](\d{4})/i,fn:m=>`${m[2]}-${m[1]}-01`},
+    {re:/EXP[:\s]+(\d{2})[\/-](\d{2})[\/-](\d{4})/i,fn:m=>`${m[3]}-${m[2]}-${m[1]}`},
+    {re:/USE BY[:\s]+(\d{2})[\/-](\d{2})[\/-](\d{4})/i,fn:m=>`${m[3]}-${m[2]}-${m[1]}`},
+  ];
+  for(const{re,fn}of patterns){
+    const m=str.match(re);
+    if(m){const d=fn(m);if(isValidDate(d))return d;}
+  }
+  return '';
+}
+
+function parseExpDate(str){
+  if(!str)return'';
+  if(/^\d{4}-\d{2}-\d{2}$/.test(str))return str;
+  const m1=str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if(m1)return`${m1[3]}-${m1[2]}-${m1[1]}`;
+  const m2=str.match(/^(\d{2})\/(\d{4})$/);
+  if(m2)return`${m2[2]}-${m2[1]}-01`;
+  return str;
+}
+
+function isValidDate(d){
+  const dt=new Date(d);return dt instanceof Date&&!isNaN(dt)&&dt.getFullYear()>2000&&dt.getFullYear()<2040;
+}
+
+function formatDisplayDate(d){
+  try{return new Date(d+'T00:00:00').toLocaleDateString('en-JM',{year:'numeric',month:'short',day:'numeric'});}catch(e){return d;}
+}
+
+function setScanStatus(msg){document.getElementById('scan-status').innerHTML=msg;}
+function showManualEntry(){
+  document.getElementById('manual-exp-row').style.display='block';
+  document.getElementById('scan-add-btn').style.display='block';
+  document.getElementById('scan-result').style.display='block';
+  document.getElementById('scan-item-name').textContent=scannedName||'Unknown item';
+  document.getElementById('scan-exp-val').textContent='Not detected';
+  scannedName=scannedName||'Unknown item';
+}
+
+async function toggleCamera(){
+  scanFacingMode=scanFacingMode==='environment'?'user':'environment';
+  scanDetected=false;
+  clearInterval(scanInterval);
+  document.getElementById('scan-result').style.display='none';
+  document.getElementById('scan-add-btn').style.display='none';
+  document.getElementById('manual-exp-row').style.display='none';
+  try{await startCamera();}catch(e){setScanStatus('Could not switch camera.');}
+}
+
+function addScannedItem(){
+  const nameEl=document.getElementById('scan-item-name');
+  const name=nameEl.textContent==='–'||nameEl.textContent==='Unknown item'?'Scanned Item':nameEl.textContent;
+  // Use manual date if provided, else scanned
+  const manualEl=document.getElementById('scan-manual-exp');
+  const exp=manualEl.value||scannedExp;
+  if(!exp){toast('Please enter the expiry date','err');return;}
+  // Pre-fill the Add Item modal
+  closeScanner();
+  document.getElementById('it-name').value=name;
+  document.getElementById('it-exp').value=exp;
+  openM('m-item');
+  toast('Item detected — review and confirm below','ok');
+}
+
+function closeScanner(){
+  clearInterval(scanInterval);
+  if(scanStream)scanStream.getTracks().forEach(t=>t.stop());
+  scanStream=null;scanDetected=false;
+  document.getElementById('scan-modal').classList.remove('open');
+  document.getElementById('scan-video').srcObject=null;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initOB();
+  const today=new Date().toISOString().split('T')[0];
+  ['b-due','e-date','r-date','it-exp'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=today;});
+});
+</script>
+
+</body>
+</html>
